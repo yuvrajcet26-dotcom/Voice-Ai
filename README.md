@@ -146,8 +146,8 @@ git commit -m "feat: complete SNGU Dhule AI voice admission & intelligent counse
 # 4. Set main branch
 git branch -M main
 
-# 5. Link to your GitHub repository (replace with your repo URL)
-git remote add origin https://github.com/YOUR_USERNAME/sngu-telephony-platform.git
+# 5. Link to your GitHub repository
+git remote add origin https://github.com/yuvrajcet26-dotcom/Voice-Ai.git
 
 # 6. Push to GitHub
 git push -u origin main
