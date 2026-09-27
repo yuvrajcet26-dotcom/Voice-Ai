@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main Admin Operations Command Center | SVKM NMIMS Global University (SNGU) Dhule</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+
+  <!-- Role-Isolated Admin Header (Only Home Page & Superuser Controls) -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Left: Logo & University Title -->
+      <div class="flex items-center gap-3.5">
+        <a href="index.html" class="flex items-center gap-3 group" title="Return to University Home">
+          <img
+            src="https://www.svkmnmimsgu.ac.in/images/sngu_logo_new.jpg"
+            alt="SNGU Dhule Logo"
+            class="h-10 w-auto object-contain rounded-lg border border-slate-100 shadow-sm bg-white p-0.5"
+            onerror="this.style.display='none'; document.getElementById('fallback-logo-admin').style.display='flex';"
+          />
+          <div id="fallback-logo-admin" style="display:none;" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-900 to-indigo-700 items-center justify-center text-white shadow-md">
+            <i data-lucide="shield-check" class="w-6 h-6 text-amber-300"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="font-extrabold text-slate-900 tracking-tight text-base sm:text-lg group-hover:text-blue-700 transition">
+                SVKM NMIMS GLOBAL UNIVERSITY
+              </h1>
+              <span class="bg-blue-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded tracking-wide uppercase">
+                Admin Center
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-medium hidden sm:block">
+              Superuser Telephony, Counselor CRUD & Academic Command
+            </p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Right: Telemetry & Admin Profile -->
+      <div class="flex items-center gap-3">
+        <div class="hidden lg:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full text-xs font-medium text-slate-700">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Exotel: <strong class="text-emerald-700">Online</strong></span>
+          <span class="text-slate-300">|</span>
+          <span>STT: <strong class="text-slate-800">Whisper-v3</strong></span>
+          <span class="text-slate-300">|</span>
+          <span>Languages: <strong class="text-blue-700">EN / HI / MR</strong></span>
+        </div>
+
+        <a href="index.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-bold transition">
+          <i data-lucide="home" class="w-3.5 h-3.5"></i>
+          <span>Home Page</span>
+        </a>
+
+        <!-- Admin Persona Badge (Clickable to Edit Name & Details) -->
+        <button onclick="openAdminProfileModal()" class="flex items-center gap-2 pl-2 border-l border-slate-200 hover:opacity-85 transition group text-left" title="Click to Edit Admin Name & Credentials">
+          <div class="w-8 h-8 rounded-lg bg-blue-900 text-white flex items-center justify-center font-black text-xs shadow-sm group-hover:bg-blue-800 transition" id="adminAvatarHeader">
+            A
+          </div>
+          <div class="text-left hidden sm:block">
+            <div class="flex items-center gap-1">
+              <p class="text-xs font-bold text-slate-900" id="adminNameHeader">Dr. S. K. Mehta</p>
+              <i data-lucide="pencil" class="w-2.5 h-2.5 text-slate-400 group-hover:text-blue-600"></i>
+            </div>
+            <p class="text-[10px] font-extrabold text-blue-600 uppercase" id="adminRoleHeader">Main Administrator</p>
+          </div>
+        </button>
+
+        <a href="login.html" class="text-slate-400 hover:text-red-600 text-xs ml-1 transition" title="Sign Out">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Body Layout: Sidebar + Dashboard Content -->
+  <div class="flex-1 flex overflow-hidden">
+    
+    <!-- Left Navigation Sidebar -->
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0 overflow-y-auto">
+      <div class="p-4 space-y-6">
+        <div>
+          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Core Administration</p>
+          <nav class="space-y-1">
+            <button onclick="switchTab('overview')" id="tab-overview" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
+              <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Master Telemetry
+            </button>
+            <button onclick="switchTab('admin-profile')" id="tab-admin-profile" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="user-cog" class="w-4 h-4 text-indigo-600"></i> Admin Profile & Details
+            </button>
+            <button onclick="switchTab('counselors')" id="tab-counselors" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="users" class="w-4 h-4 text-blue-600"></i> Counselor Management (CRUD)
+            </button>
+            <button onclick="switchTab('approvals')" id="tab-approvals" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <span class="flex items-center gap-2.5">
+                <i data-lucide="check-square" class="w-4 h-4 text-amber-600"></i> Counselor Requests
+              </span>
+              <span id="pendingRequestsBadge" class="bg-amber-100 text-amber-800 text-[10px] font-bold px-1.5 py-0.5 rounded-full">2</span>
+            </button>
+            <button onclick="switchTab('schools')" id="tab-schools" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="building-2" class="w-4 h-4"></i> Schools (STME, SPTM, SOC)
+            </button>
+            <button onclick="switchTab('courses')" id="tab-courses" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="book-open" class="w-4 h-4"></i> Programs & 7 B.Tech Branches
+            </button>
+          </nav>
+        </div>
+
+        <div>
+          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Telephony & AI Systems</p>
+          <nav class="space-y-1">
+            <button onclick="switchTab('telephony')" id="tab-telephony" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="phone" class="w-4 h-4"></i> Virtual ExoPhones (+91 2562)
+            </button>
+            <button onclick="switchTab('workflows')" id="tab-workflows" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="git-fork" class="w-4 h-4"></i> Visual Workflow Engine
+            </button>
+            <button onclick="switchTab('knowledge')" id="tab-knowledge" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="file-text" class="w-4 h-4"></i> Knowledge RAG & FAQs
+            </button>
+            <button onclick="switchTab('workinghours')" id="tab-workinghours" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="calendar" class="w-4 h-4"></i> Working Hours (Asia/Kolkata)
+            </button>
+            <button onclick="switchTab('audit')" id="tab-audit" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="shield-alert" class="w-4 h-4"></i> Security Audit Logs
+            </button>
+          </nav>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Scrollable Dashboard Content -->
+    <main class="flex-1 overflow-y-auto p-6 space-y-6">
+      
+      <!-- Section 1: Overview Master Telemetry -->
+      <div id="section-overview" class="space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-black text-slate-900 tracking-tight">SNGU Dhule Telephony Command Center</h2>
+            <p class="text-xs text-slate-500">Live operational metrics across STME, SPTM, and SOC admission lines</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="openAddCounselorModal()" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+              <i data-lucide="user-plus" class="w-4 h-4"></i> + Add Counselor
+            </button>
+          </div>
+        </div>
+
+        <!-- 6 Live KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold uppercase tracking-wider">Today's Inquiries</span>
+              <i data-lucide="phone-incoming" class="w-4 h-4 text-blue-600"></i>
+            </div>
+            <p class="text-2xl font-black text-slate-900" id="kpi-calls">148</p>
+            <p class="text-[10px] text-emerald-600 font-semibold">+18% vs yesterday</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold uppercase tracking-wider">Active Calls</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            </div>
+            <p class="text-2xl font-black text-emerald-600">3</p>
+            <p class="text-[10px] text-slate-500">STME, SOC live sessions</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold uppercase tracking-wider">Counselors Online</span>
+              <i data-lucide="users" class="w-4 h-4 text-emerald-600"></i>
+            </div>
+            <p class="text-2xl font-black text-slate-900" id="kpi-counselors-count">5 Total</p>
+            <p class="text-[10px] text-emerald-600 font-semibold">3 Available / 2 Busy</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold uppercase tracking-wider">20s Lock Rate</span>
+              <i data-lucide="shield-check" class="w-4 h-4 text-purple-600"></i>
+            </div>
+            <p class="text-2xl font-black text-slate-900">96.4%</p>
+            <p class="text-[10px] text-purple-600 font-semibold">Zero collision lock</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold uppercase tracking-wider">Avg Latency</span>
+              <i data-lucide="zap" class="w-4 h-4 text-amber-500"></i>
+            </div>
+            <p class="text-2xl font-black text-slate-900">1.8s</p>
+            <p class="text-[10px] text-slate-500">Target &lt; 2.0s</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold uppercase tracking-wider">Pending Requests</span>
+              <i data-lucide="bell" class="w-4 h-4 text-amber-600"></i>
+            </div>
+            <p class="text-2xl font-black text-amber-600" id="kpi-pending-req">2</p>
+            <p class="text-[10px] text-amber-700 font-semibold">Awaiting your approval</p>
+          </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 lg:col-span-2">
+            <h3 class="font-bold text-slate-900 text-sm">Hourly Call Influx & Live Counselor Transfers</h3>
+            <div class="h-64"><canvas id="callVolumeChart"></canvas></div>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <h3 class="font-bold text-slate-900 text-sm">Multilingual Caller Breakdown</h3>
+            <div class="h-56 flex items-center justify-center"><canvas id="languageChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Admin Profile & Credentials Management -->
+      <div id="section-admin-profile" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 rounded-2xl bg-blue-900 text-white flex items-center justify-center text-2xl font-black shadow-lg" id="profileBigAvatarAdmin">
+                A
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-xl font-black text-slate-900" id="profAdminNameDisplay">Dr. S. K. Mehta</h3>
+                  <span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Superuser Admin</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5" id="profAdminTitleDisplay">Main Administrator & Admissions Dean</p>
+              </div>
+            </div>
+
+            <button onclick="openAdminProfileModal()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm transition">
+              <i data-lucide="edit-3" class="w-4 h-4"></i> Edit Profile & Credentials
+            </button>
+          </div>
+
+          <!-- Admin Details Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
+              <span class="text-slate-400 font-bold uppercase text-[10px]">Official Admin User ID</span>
+              <p class="font-mono font-black text-blue-700 text-base" id="profAdminIdDisplay">SNGU-ADM-001</p>
+              <p class="text-slate-400 text-[11px]">Primary Master Key Access</p>
+            </div>
+
+            <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 space-y-1">
+              <span class="text-emerald-700 font-bold uppercase text-[10px]">Sanctioned Monthly Salary</span>
+              <p class="font-black text-emerald-900 text-base" id="profAdminSalaryDisplay">₹1,60,000 / month</p>
+              <p class="text-emerald-700 text-[11px]">Level 14 Higher Academic Pay Scale</p>
+            </div>
+
+            <div class="p-4 bg-blue-50 rounded-2xl border border-blue-200 space-y-1">
+              <span class="text-blue-700 font-bold uppercase text-[10px]">Official Organization Email</span>
+              <p class="font-mono font-bold text-blue-900 text-sm" id="profAdminEmailDisplay">admin@svkm.ac.in</p>
+              <p class="text-blue-600 text-[11px]">Webmail Active</p>
+            </div>
+
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
+              <span class="text-slate-400 font-bold uppercase text-[10px]">Official Mobile Number</span>
+              <p class="font-mono font-bold text-slate-900 text-sm" id="profAdminPhoneDisplay">+91 2562 281456</p>
+              <p class="text-slate-400 text-[11px]">ExoPhone Dispatch Line</p>
+            </div>
+
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
+              <span class="text-slate-400 font-bold uppercase text-[10px]">Office & Campus Location</span>
+              <p class="font-bold text-slate-900" id="profAdminOfficeDisplay">Admin Complex, Block A-101, Dhule Campus</p>
+              <p class="text-slate-400 text-[11px]">Survey No. 499, Plot No. 1</p>
+            </div>
+
+            <div class="p-4 bg-purple-50 rounded-2xl border border-purple-200 space-y-1">
+              <span class="text-purple-700 font-bold uppercase text-[10px]">System Access Privileges</span>
+              <p class="font-bold text-purple-900">Counselor CRUD • Telephony • RAG Voice</p>
+              <p class="text-purple-600 text-[11px]">Full Root Access</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Counselor Management (Full CRUD) -->
+      <div id="section-counselors" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div>
+            <h3 class="font-black text-slate-900 text-lg">Counselor Directory & Management</h3>
+            <p class="text-xs text-slate-500">Admin can Add, Edit, and Delete/Deactivate Counselors across STME, SPTM, and SOC pools</p>
+          </div>
+          <button onclick="openAddCounselorModal()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm transition">
+            <i data-lucide="user-plus" class="w-4 h-4"></i> + Add New Counselor
+          </button>
+        </div>
+
+        <!-- Table of Counselors -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
+              <tr>
+                <th class="py-3 px-4">Counselor Name & ID</th>
+                <th class="py-3 px-4">School & Dept</th>
+                <th class="py-3 px-4">Monthly Salary</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4">Contact Phone & Email</th>
+                <th class="py-3 px-4">Languages</th>
+                <th class="py-3 px-4 text-right">Admin Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100" id="counselorCrudTableBody">
+              <!-- Rendered dynamically by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section 3: Counselor Requests & Approvals -->
+      <div id="section-approvals" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <div class="border-b border-slate-100 pb-4">
+          <h3 class="font-black text-slate-900 text-lg">Counselor Requests & Admin Approvals</h3>
+          <p class="text-xs text-slate-500">Review and approve/reject shift change requests, leave applications, and permissions submitted by counselors</p>
+        </div>
+
+        <div class="space-y-3" id="requestsApprovalFeed">
+          <!-- Rendered dynamically by JS -->
+        </div>
+      </div>
+
+      <!-- Section 4: Schools Management Module -->
+      <div id="section-schools" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div>
+            <h3 class="font-black text-slate-900 text-lg">SNGU Constituent Schools Governance</h3>
+            <p class="text-xs text-slate-500">Manage Dean profiles, intake allocation, and telephony routing pools</p>
+          </div>
+          <button onclick="alert('School configuration update saved.')" class="px-3.5 py-1.5 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-sm">Save Changes</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-5 rounded-2xl border-2 border-blue-200 bg-blue-50/30 space-y-3">
+            <span class="bg-blue-600 text-white font-black text-xs px-2 py-0.5 rounded">STME</span>
+            <h4 class="font-black text-slate-900 text-base">Mukesh Patel School of Technology</h4>
+            <p class="text-xs text-slate-600 font-medium">Dean: <strong>Dr. Manoj S. Sonawane</strong></p>
+            <div class="text-xs text-slate-500 space-y-1 pt-2 border-t border-blue-100">
+              <p>• Total Sanctioned Intake: <strong>480 Seats</strong></p>
+              <p>• Active Counselor Pool: <strong>5 Counselors</strong></p>
+              <p>• Assigned Phone: <strong>+91 2562 281456 (Ext 1)</strong></p>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-2xl border-2 border-emerald-200 bg-emerald-50/30 space-y-3">
+            <span class="bg-emerald-600 text-white font-black text-xs px-2 py-0.5 rounded">SPTM</span>
+            <h4 class="font-black text-slate-900 text-base">School of Pharmacy (SPTM)</h4>
+            <p class="text-xs text-slate-600 font-medium">Dean: <strong>Dr. Pravin R. Patil</strong></p>
+            <div class="text-xs text-slate-500 space-y-1 pt-2 border-t border-emerald-100">
+              <p>• Total Sanctioned Intake: <strong>220 Seats</strong></p>
+              <p>• Active Counselor Pool: <strong>3 Counselors</strong></p>
+              <p>• Assigned Phone: <strong>+91 2562 281456 (Ext 2)</strong></p>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-2xl border-2 border-purple-200 bg-purple-50/30 space-y-3">
+            <span class="bg-purple-600 text-white font-black text-xs px-2 py-0.5 rounded">SOC</span>
+            <h4 class="font-black text-slate-900 text-base">School of Commerce & Economics</h4>
+            <p class="text-xs text-slate-600 font-medium">Dean: <strong>Dr. Sandeep S. Joshi</strong></p>
+            <div class="text-xs text-slate-500 space-y-1 pt-2 border-t border-purple-100">
+              <p>• Total Sanctioned Intake: <strong>240 Seats</strong></p>
+              <p>• Active Counselor Pool: <strong>2 Counselors</strong></p>
+              <p>• Assigned Phone: <strong>+91 2562 281456 (Ext 3)</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Programs & 7 B.Tech Branches -->
+      <div id="section-courses" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div>
+            <h3 class="font-black text-slate-900 text-lg">Academic Programs & 7 B.Tech Specializations</h3>
+            <p class="text-xs text-slate-500">Live intake matrix, duration, and AI eligibility criteria matching</p>
+          </div>
+          <button onclick="alert('Exporting Academic Program Catalog PDF...')" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold">Export Catalog</button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-1.5">
+            <span class="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded text-[10px]">STME • 4 Years</span>
+            <h4 class="font-bold text-slate-900">B.Tech Computer Engineering</h4>
+            <p class="text-slate-500">120 Seats • Intake Filled: 93% • Fees: ₹1,85,000/yr</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-1.5">
+            <span class="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded text-[10px]">STME • 4 Years</span>
+            <h4 class="font-bold text-slate-900">B.Tech CSE (AI & Machine Learning)</h4>
+            <p class="text-slate-500">60 Seats • Intake Filled: 96% • Fees: ₹1,95,000/yr</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-1.5">
+            <span class="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded text-[10px]">STME • 4 Years</span>
+            <h4 class="font-bold text-slate-900">B.Tech CSE (Data Science)</h4>
+            <p class="text-slate-500">60 Seats • Intake Filled: 90% • Fees: ₹1,95,000/yr</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-1.5">
+            <span class="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded text-[10px]">STME • 4 Years</span>
+            <h4 class="font-bold text-slate-900">B.Tech Information Technology</h4>
+            <p class="text-slate-500">60 Seats • Intake Filled: 88% • Fees: ₹1,80,000/yr</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-1.5">
+            <span class="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded text-[10px]">STME • 4 Years</span>
+            <h4 class="font-bold text-slate-900">B.Tech Mechanical Engineering</h4>
+            <p class="text-slate-500">60 Seats • Intake Filled: 75% • Fees: ₹1,50,000/yr</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-1.5">
+            <span class="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded text-[10px]">STME • 4 Years</span>
+            <h4 class="font-bold text-slate-900">B.Tech Civil Engineering</h4>
+            <p class="text-slate-500">60 Seats • Intake Filled: 70% • Fees: ₹1,40,000/yr</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-1.5">
+            <span class="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded text-[10px]">STME • 4 Years</span>
+            <h4 class="font-bold text-slate-900">B.Tech Electrical Engineering</h4>
+            <p class="text-slate-500">60 Seats • Intake Filled: 72% • Fees: ₹1,45,000/yr</p>
+          </div>
+          <div class="p-4 rounded-xl border border-emerald-200 bg-emerald-50/50 space-y-1.5">
+            <span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10px]">SPTM • 4 Years</span>
+            <h4 class="font-bold text-slate-900">Bachelor of Pharmacy (B.Pharm)</h4>
+            <p class="text-slate-500">100 Seats • Intake Filled: 86% • Fees: ₹1,65,000/yr</p>
+          </div>
+          <div class="p-4 rounded-xl border border-purple-200 bg-purple-50/50 space-y-1.5">
+            <span class="bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded text-[10px]">SOC • 3 Years</span>
+            <h4 class="font-bold text-slate-900">Bachelor of Business Admin (BBA)</h4>
+            <p class="text-slate-500">120 Seats • Intake Filled: 81% • Fees: ₹1,20,000/yr</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 6: Telephony Virtual ExoPhones -->
+      <div id="section-telephony" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div>
+            <h3 class="font-black text-slate-900 text-lg">Virtual ExoPhone Trunks (+91 2562 281456)</h3>
+            <p class="text-xs text-slate-500">Exotel Webhook Dispatch Channel, SIP Trunks, and Audio Streaming</p>
+          </div>
+          <span class="px-3 py-1 bg-emerald-100 text-emerald-800 font-bold rounded-full text-xs">Exotel SIP Trunk: Healthy</span>
+        </div>
+
+        <div class="p-4 bg-slate-900 text-white rounded-2xl space-y-2 text-xs font-mono">
+          <p class="text-emerald-400">Webhook URL: https://api.svkm.ac.in/v1/telephony/exotel/incoming</p>
+          <p class="text-blue-300">AgentStream WebSocket: wss://api.svkm.ac.in/v1/stream/audio (8000Hz PCM)</p>
+          <p class="text-amber-300">Routing Algorithm: Atomic 20s Broadcast with First-Accept Lock</p>
+        </div>
+      </div>
+
+      <!-- Section 7: Workflows -->
+      <div id="section-workflows" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <h3 class="font-black text-slate-900 text-lg">Visual Workflow Logic Engine</h3>
+        <p class="text-xs text-slate-500">Step-by-step decision tree for multilingual voice routing</p>
+        
+        <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 text-center text-xs">
+          <div class="p-4 bg-white rounded-xl border shadow-sm w-full md:w-48">
+            <i data-lucide="phone-incoming" class="w-6 h-6 text-blue-600 mx-auto mb-2"></i>
+            <strong>1. Inbound Call</strong>
+            <p class="text-slate-400 text-[10px]">+91 2562 281456</p>
+          </div>
+          <i data-lucide="arrow-right" class="w-6 h-6 text-slate-400 hidden md:block"></i>
+          <div class="p-4 bg-white rounded-xl border shadow-sm w-full md:w-48">
+            <i data-lucide="globe" class="w-6 h-6 text-amber-500 mx-auto mb-2"></i>
+            <strong>2. Lang Detection</strong>
+            <p class="text-slate-400 text-[10px]">EN / HI / MR</p>
+          </div>
+          <i data-lucide="arrow-right" class="w-6 h-6 text-slate-400 hidden md:block"></i>
+          <div class="p-4 bg-white rounded-xl border shadow-sm w-full md:w-48">
+            <i data-lucide="bot" class="w-6 h-6 text-emerald-600 mx-auto mb-2"></i>
+            <strong>3. AI RAG Agent</strong>
+            <p class="text-slate-400 text-[10px]">Instant Answer</p>
+          </div>
+          <i data-lucide="arrow-right" class="w-6 h-6 text-slate-400 hidden md:block"></i>
+          <div class="p-4 bg-white rounded-xl border shadow-sm w-full md:w-48">
+            <i data-lucide="headphones" class="w-6 h-6 text-purple-600 mx-auto mb-2"></i>
+            <strong>4. Counselor Transfer</strong>
+            <p class="text-slate-400 text-[10px]">20s Atomic Lock</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 8: Knowledge Base & FAQs -->
+      <div id="section-knowledge" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <h3 class="font-black text-slate-900 text-lg">Admission Knowledge Base & FAQs</h3>
+            <p class="text-xs text-slate-500">Live vector embeddings feeding AI voice responses</p>
+          </div>
+          <button onclick="alert('Vector re-indexing completed for SNGU Knowledge Base.')" class="px-3.5 py-1.5 bg-blue-600 text-white rounded-xl text-xs font-bold">Sync Vector DB</button>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <strong class="text-slate-900">Q: What is the MHT-CET cutoff for STME Computer Engineering?</strong>
+            <p class="text-slate-600 mt-1">A: Cutoff for A.Y. 2026-27 CAP Round I was 88.5 percentile. Round II is currently active for vacancies.</p>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <strong class="text-slate-900">Q: Is hostel facility available on campus for girls and boys?</strong>
+            <p class="text-slate-600 mt-1">A: Yes, SNGU Dhule campus features dedicated 300-bed AC/Non-AC hostels for both boys and girls with 24/7 security and mess.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 9: Working Hours & Voicemail -->
+      <div id="section-workinghours" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <h3 class="font-black text-slate-900 text-lg">Academic Working Hours Configuration</h3>
+        <p class="text-xs text-slate-500">Timezone: Asia/Kolkata (IST). Outside these hours, calls automatically record voicemails.</p>
+        
+        <div class="grid grid-cols-2 gap-4 text-xs max-w-md">
+          <div class="p-3 bg-slate-50 rounded-xl border">
+            <span class="text-slate-500 block">Mon - Sat Hours</span>
+            <strong class="text-slate-900 text-sm">09:00 AM - 06:00 PM IST</strong>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-xl border">
+            <span class="text-slate-500 block">Sunday / Holidays</span>
+            <strong class="text-amber-700 text-sm">Voicemail Queue Active</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 10: Security Audit Logs -->
+      <div id="section-audit" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <h3 class="font-black text-slate-900 text-lg">Security & Operational Audit Logs</h3>
+        <p class="text-xs text-slate-500">Immutable chronological trail of administrative and telephony actions</p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs font-mono">
+            <thead class="bg-slate-50 text-slate-500 uppercase border-b">
+              <tr>
+                <th class="p-3">Timestamp</th>
+                <th class="p-3">Actor</th>
+                <th class="p-3">Action</th>
+                <th class="p-3">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y text-slate-700">
+              <tr>
+                <td class="p-3">2026-09-27 10:35:12</td>
+                <td>Dr. S. K. Mehta (Admin)</td>
+                <td>Approved Counselor Leave REQ-02</td>
+                <td><span class="text-emerald-600 font-bold">SUCCESS</span></td>
+              </tr>
+              <tr>
+                <td class="p-3">2026-09-27 10:22:45</td>
+                <td>Telephony Engine</td>
+                <td>Atomic Lock Acquired by Prof. Chetan Patil</td>
+                <td><span class="text-blue-600 font-bold">LOCKED</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ADD / EDIT COUNSELOR MODAL -->
+  <div id="counselorModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="bg-gradient-to-r from-blue-700 to-indigo-700 p-5 text-white flex items-center justify-between">
+        <div>
+          <h3 class="font-black text-base" id="modalTitle">Add New Admission Counselor</h3>
+          <p class="text-[11px] text-blue-100">SNGU Dhule Academic Counselor Pool</p>
+        </div>
+        <button onclick="closeCounselorModal()" class="text-white/80 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <form onsubmit="handleSaveCounselor(event)" class="p-6 space-y-4 text-xs">
+        <input type="hidden" id="editCounselorId" />
+        
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Full Name</label>
+          <input type="text" id="counselorName" required placeholder="e.g. Prof. Nilesh Sharma" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Assigned School</label>
+            <select id="counselorSchool" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none">
+              <option value="STME">STME (Engineering)</option>
+              <option value="SPTM">SPTM (Pharmacy)</option>
+              <option value="SOC">SOC (Commerce)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Department</label>
+            <input type="text" id="counselorDept" required placeholder="e.g. Computer Engineering" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Phone Number</label>
+            <input type="tel" id="counselorPhone" required placeholder="+91 98200 11000" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none font-mono" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Official Email Address</label>
+            <input type="email" id="counselorEmail" required placeholder="counselor@svkm.ac.in" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none font-mono" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Monthly Salary (INR)</label>
+            <input type="text" id="counselorSalary" required placeholder="₹78,500 / month" value="₹78,500 / month" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none font-medium" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Initial Availability</label>
+            <select id="counselorState" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none">
+              <option value="AVAILABLE">AVAILABLE</option>
+              <option value="BUSY">BUSY</option>
+              <option value="ON_BREAK">ON BREAK</option>
+              <option value="ON_LEAVE">ON LEAVE</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Security Login Password</label>
+          <input type="password" id="counselorPassword" placeholder="Set or leave default (Counselor@123)" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none font-mono" />
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeCounselorModal()" class="px-4 py-2 rounded-xl border border-slate-300 font-bold hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-md">Save Counselor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADMIN PROFILE & CREDENTIALS EDIT MODAL -->
+  <div id="adminProfileModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-800 p-5 text-white flex items-center justify-between">
+        <div>
+          <h3 class="font-black text-base">Edit Administrator Profile & Credentials</h3>
+          <p class="text-[11px] text-blue-200">SVKM NMIMS Global University • Superuser Details</p>
+        </div>
+        <button onclick="closeAdminProfileModal()" class="text-white/80 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <form onsubmit="handleSaveAdminProfile(event)" class="p-6 space-y-4 text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Admin Full Name *</label>
+            <input type="text" id="adminEditName" required placeholder="e.g. Dr. S. K. Mehta" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none font-bold" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Official Designation / Title *</label>
+            <input type="text" id="adminEditTitle" required placeholder="e.g. Main Administrator & Admissions Dean" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Admin User ID *</label>
+            <input type="text" id="adminEditId" required placeholder="SNGU-ADM-001" class="w-full p-2.5 border rounded-xl bg-slate-50 font-mono font-bold text-blue-700 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Sanctioned Monthly Salary</label>
+            <input type="text" id="adminEditSalary" required placeholder="₹1,60,000 / month" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none font-bold text-emerald-800" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Official Organization Email *</label>
+            <input type="email" id="adminEditEmail" required placeholder="admin@svkm.ac.in" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none font-mono" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Official Phone Number *</label>
+            <input type="tel" id="adminEditPhone" required placeholder="+91 2562 281456" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none font-mono" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Campus Office Location</label>
+          <input type="text" id="adminEditOffice" placeholder="Admin Complex, Block A-101, Dhule Campus" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Security Login Password (Leave blank to keep unchanged)</label>
+          <input type="password" id="adminEditPassword" placeholder="Enter new password to update..." class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none font-mono" />
+        </div>
+
+        <div class="p-3 bg-blue-50/60 rounded-xl border border-blue-200 text-slate-600 text-[11px]">
+          <p>Changes saved here will update the header badge, admin profile view, and persistent authentication records.</p>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeAdminProfileModal()" class="px-4 py-2 rounded-xl border border-slate-300 font-bold hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-md">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Default Admin Profile
+    const DEFAULT_ADMIN_PROFILE = {
+      id: 'SNGU-ADM-001',
+      name: 'Dr. S. K. Mehta',
+      title: 'Main Administrator & Admissions Dean',
+      email: 'admin@svkm.ac.in',
+      phone: '+91 2562 281456',
+      office: 'Admin Complex, Block A-101, Dhule Campus',
+      salary: '₹1,60,000 / month',
+      password: 'Admin@123'
+    };
+
+    function getAdminProfile() {
+      try {
+        const stored = localStorage.getItem('svkm_admin_profile');
+        if (stored) {
+          return { ...DEFAULT_ADMIN_PROFILE, ...JSON.parse(stored) };
+        }
+      } catch (e) {
+        console.error('Error loading admin profile:', e);
+      }
+      return DEFAULT_ADMIN_PROFILE;
+    }
+
+    function saveAdminProfile(profile) {
+      localStorage.setItem('svkm_admin_profile', JSON.stringify(profile));
+      // Update registered users if admin exists
+      try {
+        let users = JSON.parse(localStorage.getItem('svkm_registered_users') || '[]');
+        const idx = users.findIndex(u => u.role === 'ADMIN' || u.id === profile.id || u.email === profile.email);
+        if (idx >= 0) {
+          users[idx].name = profile.name;
+          users[idx].phone = profile.phone;
+          users[idx].email = profile.email;
+          if (profile.password) users[idx].password = profile.password;
+          localStorage.setItem('svkm_registered_users', JSON.stringify(users));
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function renderAdminProfileDOM() {
+      const prof = getAdminProfile();
+      const firstChar = prof.name ? prof.name.replace(/^(Dr\.|Prof\.|Mr\.|Mrs\.|Ms\.)\s*/i, '').charAt(0).toUpperCase() || 'A' : 'A';
+
+      // Header Elements
+      const headerAvatar = document.getElementById('adminAvatarHeader');
+      if (headerAvatar) headerAvatar.innerText = firstChar;
+      const headerName = document.getElementById('adminNameHeader');
+      if (headerName) headerName.innerText = prof.name;
+      const headerRole = document.getElementById('adminRoleHeader');
+      if (headerRole) headerRole.innerText = prof.title.includes('Admin') ? prof.title : 'Main Administrator';
+
+      // Section Display Elements
+      const bigAvatar = document.getElementById('profileBigAvatarAdmin');
+      if (bigAvatar) bigAvatar.innerText = firstChar;
+      const nameDisp = document.getElementById('profAdminNameDisplay');
+      if (nameDisp) nameDisp.innerText = prof.name;
+      const titleDisp = document.getElementById('profAdminTitleDisplay');
+      if (titleDisp) titleDisp.innerText = prof.title;
+      const idDisp = document.getElementById('profAdminIdDisplay');
+      if (idDisp) idDisp.innerText = prof.id;
+      const salaryDisp = document.getElementById('profAdminSalaryDisplay');
+      if (salaryDisp) salaryDisp.innerText = prof.salary;
+      const emailDisp = document.getElementById('profAdminEmailDisplay');
+      if (emailDisp) emailDisp.innerText = prof.email;
+      const phoneDisp = document.getElementById('profAdminPhoneDisplay');
+      if (phoneDisp) phoneDisp.innerText = prof.phone;
+      const officeDisp = document.getElementById('profAdminOfficeDisplay');
+      if (officeDisp) officeDisp.innerText = prof.office;
+
+      lucide.createIcons();
+    }
+
+    function openAdminProfileModal() {
+      const prof = getAdminProfile();
+      document.getElementById('adminEditName').value = prof.name;
+      document.getElementById('adminEditTitle').value = prof.title;
+      document.getElementById('adminEditId').value = prof.id;
+      document.getElementById('adminEditSalary').value = prof.salary;
+      document.getElementById('adminEditEmail').value = prof.email;
+      document.getElementById('adminEditPhone').value = prof.phone;
+      document.getElementById('adminEditOffice').value = prof.office;
+      document.getElementById('adminEditPassword').value = '';
+      document.getElementById('adminProfileModal').classList.remove('hidden');
+    }
+
+    function closeAdminProfileModal() {
+      document.getElementById('adminProfileModal').classList.add('hidden');
+    }
+
+    function handleSaveAdminProfile(e) {
+      e.preventDefault();
+      const current = getAdminProfile();
+      const newName = document.getElementById('adminEditName').value.trim();
+      const newTitle = document.getElementById('adminEditTitle').value.trim();
+      const newId = document.getElementById('adminEditId').value.trim();
+      const newSalary = document.getElementById('adminEditSalary').value.trim();
+      const newEmail = document.getElementById('adminEditEmail').value.trim();
+      const newPhone = document.getElementById('adminEditPhone').value.trim();
+      const newOffice = document.getElementById('adminEditOffice').value.trim();
+      const newPwd = document.getElementById('adminEditPassword').value.trim();
+
+      const updated = {
+        ...current,
+        name: newName,
+        title: newTitle,
+        id: newId,
+        salary: newSalary,
+        email: newEmail,
+        phone: newPhone,
+        office: newOffice,
+        password: newPwd ? newPwd : current.password
+      };
+
+      saveAdminProfile(updated);
+      renderAdminProfileDOM();
+      closeAdminProfileModal();
+      alert(`✅ Administrator Profile Updated Successfully!\n\nName: ${updated.name}\nDesignation: ${updated.title}\nEmail: ${updated.email}\nPhone: ${updated.phone}\nOffice: ${updated.office}`);
+    }
+
+    // Default Counselors
+    const INITIAL_COUNSELORS = [
+      { id: 'SNGU-CNS-STME-001', name: 'Prof. Anita Sharma', school: 'STME', dept: 'First Year Engineering', phone: '+91 98200 11001', email: 'anita.sharma@svkm.ac.in', salary: '₹82,000 / month', state: 'BUSY', languages: ['EN', 'HI'] },
+      { id: 'SNGU-CNS-STME-002', name: 'Prof. Bharat Dave', school: 'STME', dept: 'Mechanical Engineering', phone: '+91 98200 11002', email: 'bharat.dave@svkm.ac.in', salary: '₹80,000 / month', state: 'BUSY', languages: ['EN', 'HI'] },
+      { id: 'SNGU-CNS-STME-003', name: 'Prof. Chetan Patil', school: 'STME', dept: 'Computer Engineering', phone: '+91 98200 11003', email: 'counselor.c@svkm.ac.in', salary: '₹78,500 / month', state: 'AVAILABLE', languages: ['EN', 'HI', 'MR'] },
+      { id: 'SNGU-CNS-STME-004', name: 'Prof. Deepali Wagh', school: 'STME', dept: 'Information Technology', phone: '+91 98200 11004', email: 'deepali.wagh@svkm.ac.in', salary: '₹76,000 / month', state: 'AVAILABLE', languages: ['EN', 'HI', 'MR'] },
+      { id: 'SNGU-CNS-STME-005', name: 'Prof. Eknath Shinde', school: 'STME', dept: 'Electrical Engineering', phone: '+91 98200 11005', email: 'eknath.shinde@svkm.ac.in', salary: '₹78,500 / month', state: 'AVAILABLE', languages: ['EN', 'MR'] }
+    ];
+
+    function getCounselorsList() {
+      try {
+        const stored = localStorage.getItem('svkm_counselors');
+        if (stored) {
+          const list = JSON.parse(stored);
+          const map = new Map();
+          INITIAL_COUNSELORS.forEach(c => map.set(c.id, c));
+          list.forEach(c => map.set(c.id, c));
+          return Array.from(map.values());
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      return INITIAL_COUNSELORS;
+    }
+
+    function saveCounselorsList(list) {
+      localStorage.setItem('svkm_counselors', JSON.stringify(list));
+    }
+
+    let counselorsList = getCounselorsList();
+
+    const DEFAULT_REQUESTS = [
+      { id: 'REQ-01', counselorName: 'Prof. Chetan Patil', school: 'STME', type: 'Shift Adjustment', reason: 'Requesting morning shift 09:00 - 15:00 for CAP Round II duty.', status: 'PENDING', time: 'Today 09:15 AM' },
+      { id: 'REQ-02', counselorName: 'Prof. Deepali Wagh', school: 'STME', type: 'Leave Application', reason: 'Leave requested on 1st October for academic conference in Pune.', status: 'PENDING', time: 'Yesterday 04:30 PM' }
+    ];
+
+    function getRequests() {
+      try {
+        const stored = localStorage.getItem('svkm_counselor_requests');
+        if (stored) return JSON.parse(stored);
+      } catch (e) {
+        console.error(e);
+      }
+      return DEFAULT_REQUESTS;
+    }
+
+    function saveRequests(reqs) {
+      localStorage.setItem('svkm_counselor_requests', JSON.stringify(reqs));
+    }
+
+    let counselorRequests = getRequests();
+
+    function renderCounselorsTable() {
+      counselorsList = getCounselorsList();
+      const tbody = document.getElementById('counselorCrudTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      counselorsList.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition';
+        
+        let statusBadgeClass = 'bg-emerald-100 text-emerald-800';
+        let statusDotClass = 'bg-emerald-500';
+        if (c.state === 'BUSY') {
+          statusBadgeClass = 'bg-amber-100 text-amber-800';
+          statusDotClass = 'bg-amber-500';
+        } else if (c.state === 'ON_BREAK') {
+          statusBadgeClass = 'bg-slate-200 text-slate-800';
+          statusDotClass = 'bg-slate-500';
+        } else if (c.state === 'ON_LEAVE') {
+          statusBadgeClass = 'bg-red-100 text-red-800';
+          statusDotClass = 'bg-red-500';
+        }
+
+        tr.innerHTML = `
+          <td class="py-3.5 px-4">
+            <p class="font-bold text-slate-900">${c.name}</p>
+            <p class="text-[10px] text-blue-700 font-mono font-bold">${c.id}</p>
+          </td>
+          <td class="py-3.5 px-4 font-medium text-slate-700">${c.school} • ${c.dept}</td>
+          <td class="py-3.5 px-4 font-black text-emerald-900">${c.salary || '₹78,500 / mo'}</td>
+          <td class="py-3.5 px-4">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold ${statusBadgeClass}">
+              <span class="w-1.5 h-1.5 rounded-full ${statusDotClass}"></span>
+              ${c.state || 'AVAILABLE'}
+            </span>
+          </td>
+          <td class="py-3.5 px-4">
+            <p class="font-mono text-slate-700 font-bold">${c.phone}</p>
+            <p class="text-[11px] text-slate-400 font-mono">${c.email || (c.id.toLowerCase() + '@svkm.ac.in')}</p>
+          </td>
+          <td class="py-3.5 px-4">
+            ${(c.languages || ['EN']).map(l => `<span class="text-[10px] bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded mr-1">${l}</span>`).join('')}
+          </td>
+          <td class="py-3.5 px-4 text-right space-x-2">
+            <button onclick="openEditCounselorModal('${c.id}')" class="text-blue-600 hover:text-blue-800 font-bold text-xs">Edit</button>
+            <button onclick="deleteCounselor('${c.id}')" class="text-red-600 hover:text-red-800 font-bold text-xs">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      const countEl = document.getElementById('kpi-counselors-count');
+      if (countEl) countEl.innerText = `${counselorsList.length} Total`;
+      lucide.createIcons();
+    }
+
+    function renderRequestsFeed() {
+      counselorRequests = getRequests();
+      const feed = document.getElementById('requestsApprovalFeed');
+      if (!feed) return;
+      feed.innerHTML = '';
+
+      if (counselorRequests.length === 0) {
+        feed.innerHTML = '<p class="text-slate-400 text-xs py-4 text-center">No counselor requests found.</p>';
+        return;
+      }
+
+      counselorRequests.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'p-4 rounded-2xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs';
+        div.innerHTML = `
+          <div>
+            <div class="flex items-center gap-2">
+              <strong class="text-slate-900 font-bold">${r.counselorName}</strong>
+              <span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded">${r.school}</span>
+              <span class="bg-purple-100 text-purple-800 text-[10px] font-bold px-2 py-0.5 rounded">${r.type}</span>
+              <span class="text-[10px] text-slate-400">${r.time}</span>
+            </div>
+            <p class="text-slate-600 text-[11px] mt-1">${r.reason}</p>
+            <p class="mt-1 font-bold ${
+              r.status === 'APPROVED' ? 'text-emerald-600' : r.status === 'REJECTED' ? 'text-red-600' : 'text-amber-600'
+            }">Status: ${r.status}</p>
+          </div>
+          <div class="flex items-center gap-2">
+            ${r.status === 'PENDING' ? `
+              <button onclick="approveRequest('${r.id}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition">Approve</button>
+              <button onclick="rejectRequest('${r.id}')" class="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition">Reject</button>
+            ` : `<span class="text-slate-400 font-bold">Resolved ✓</span>`}
+          </div>
+        `;
+        feed.appendChild(div);
+      });
+
+      const pending = counselorRequests.filter(r => r.status === 'PENDING').length;
+      const pBadge = document.getElementById('pendingRequestsBadge');
+      if (pBadge) pBadge.innerText = pending;
+      const kpiPending = document.getElementById('kpi-pending-req');
+      if (kpiPending) kpiPending.innerText = pending;
+      lucide.createIcons();
+    }
+
+    function approveRequest(id) {
+      counselorRequests = getRequests();
+      const req = counselorRequests.find(r => r.id === id);
+      if (req) {
+        req.status = 'APPROVED';
+        saveRequests(counselorRequests);
+        renderRequestsFeed();
+        alert(`✅ Request from ${req.counselorName} has been APPROVED by ${getAdminProfile().name}.\nConfirmation notification sent to counselor terminal.`);
+      }
+    }
+
+    function rejectRequest(id) {
+      counselorRequests = getRequests();
+      const req = counselorRequests.find(r => r.id === id);
+      if (req) {
+        req.status = 'REJECTED';
+        saveRequests(counselorRequests);
+        renderRequestsFeed();
+        alert(`❌ Request from ${req.counselorName} has been REJECTED.`);
+      }
+    }
+
+    function openAddCounselorModal() {
+      document.getElementById('editCounselorId').value = '';
+      document.getElementById('counselorName').value = '';
+      document.getElementById('counselorDept').value = '';
+      document.getElementById('counselorPhone').value = '';
+      document.getElementById('counselorEmail').value = '';
+      document.getElementById('counselorSalary').value = '₹78,500 / month';
+      document.getElementById('counselorPassword').value = '';
+      document.getElementById('modalTitle').innerText = 'Add New Admission Counselor';
+      document.getElementById('counselorModal').classList.remove('hidden');
+    }
+
+    function openEditCounselorModal(id) {
+      const c = counselorsList.find(item => item.id === id);
+      if (!c) return;
+      document.getElementById('editCounselorId').value = c.id;
+      document.getElementById('counselorName').value = c.name;
+      document.getElementById('counselorSchool').value = c.school;
+      document.getElementById('counselorDept').value = c.dept;
+      document.getElementById('counselorPhone').value = c.phone;
+      document.getElementById('counselorEmail').value = c.email || (c.id.toLowerCase() + '@svkm.ac.in');
+      document.getElementById('counselorSalary').value = c.salary || '₹78,500 / month';
+      document.getElementById('counselorState').value = c.state || 'AVAILABLE';
+      document.getElementById('counselorPassword').value = c.password || '';
+      document.getElementById('modalTitle').innerText = 'Edit Counselor: ' + c.name;
+      document.getElementById('counselorModal').classList.remove('hidden');
+    }
+
+    function closeCounselorModal() {
+      document.getElementById('counselorModal').classList.add('hidden');
+    }
+
+    function handleSaveCounselor(e) {
+      e.preventDefault();
+      const editId = document.getElementById('editCounselorId').value;
+      const name = document.getElementById('counselorName').value;
+      const school = document.getElementById('counselorSchool').value;
+      const dept = document.getElementById('counselorDept').value;
+      const phone = document.getElementById('counselorPhone').value;
+      const email = document.getElementById('counselorEmail').value;
+      const salary = document.getElementById('counselorSalary').value;
+      const state = document.getElementById('counselorState').value;
+      const pwd = document.getElementById('counselorPassword').value || 'Counselor@123';
+
+      if (editId) {
+        const c = counselorsList.find(item => item.id === editId);
+        if (c) {
+          c.name = name;
+          c.school = school;
+          c.dept = dept;
+          c.phone = phone;
+          c.email = email;
+          c.salary = salary;
+          c.state = state;
+          if (pwd) c.password = pwd;
+        }
+      } else {
+        const newId = `SNGU-CNS-${school}-00${counselorsList.length + 1}`;
+        counselorsList.push({
+          id: newId,
+          name: name,
+          school: school,
+          dept: dept,
+          phone: phone,
+          email: email,
+          salary: salary,
+          password: pwd,
+          state: state,
+          languages: ['EN', 'HI', 'MR']
+        });
+      }
+
+      saveCounselorsList(counselorsList);
+      closeCounselorModal();
+      renderCounselorsTable();
+      alert('Counselor record saved successfully to SNGU Directory.');
+    }
+
+    function deleteCounselor(id) {
+      if (confirm('Are you sure you want to delete / deactivate this counselor?')) {
+        counselorsList = counselorsList.filter(c => c.id !== id);
+        saveCounselorsList(counselorsList);
+        renderCounselorsTable();
+        alert('Counselor removed from pool.');
+      }
+    }
+
+    // Chart 1: Hourly Call Volumes
+    const ctx1 = document.getElementById('callVolumeChart').getContext('2d');
+    new Chart(ctx1, {
+      type: 'line',
+      data: {
+        labels: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
+        datasets: [
+          { label: 'Total Calls', data: [14, 28, 42, 36, 18, 30, 48, 39, 25], borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.1)', fill: true, tension: 0.35 },
+          { label: 'Locked Transfers', data: [6, 12, 22, 16, 8, 14, 25, 20, 11], borderColor: '#10b981', tension: 0.35, borderDash: [4, 4] }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, scales: { y: { grid: { color: '#f1f5f9' } }, x: { grid: { color: '#f1f5f9' } } } }
+    });
+
+    // Chart 2: Language Distribution
+    const ctx2 = document.getElementById('languageChart').getContext('2d');
+    new Chart(ctx2, {
+      type: 'doughnut',
+      data: {
+        labels: ['English (48%)', 'Hindi (34%)', 'Marathi (18%)'],
+        datasets: [{ data: [48, 34, 18], backgroundColor: ['#2563eb', '#f59e0b', '#10b981'], borderWidth: 0 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
+    });
+
+    function switchTab(tab) {
+      const allSections = [
+        'overview', 'admin-profile', 'counselors', 'approvals', 'schools', 'courses', 
+        'telephony', 'workflows', 'knowledge', 'workinghours', 'audit'
+      ];
+
+      allSections.forEach(s => {
+        const el = document.getElementById('section-' + s);
+        if (el) el.classList.add('hidden');
+      });
+
+      document.querySelectorAll('aside nav button').forEach(b => {
+        b.className = 'w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition';
+      });
+      const activeBtn = document.getElementById('tab-' + tab);
+      if (activeBtn) {
+        activeBtn.className = 'w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200';
+      }
+
+      const targetSec = document.getElementById('section-' + tab);
+      if (targetSec) {
+        targetSec.classList.remove('hidden');
+      }
+
+      if (tab === 'admin-profile') renderAdminProfileDOM();
+      if (tab === 'counselors') renderCounselorsTable();
+      if (tab === 'approvals') renderRequestsFeed();
+      lucide.createIcons();
+    }
+
+    renderAdminProfileDOM();
+    renderCounselorsTable();
+    renderRequestsFeed();
+  </script>
+</body>
+</html>

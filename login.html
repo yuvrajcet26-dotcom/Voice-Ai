@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Role-Based Authentication Portal | SVKM NMIMS Global University (SNGU) Dhule</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    @keyframes fadeInModal {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .modal-anim { animation: fadeInModal 0.2s ease-out forwards; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+
+  <!-- Role-Isolated Header (Only Home Page Navigation) -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <img
+          src="https://www.svkmnmimsgu.ac.in/images/sngu_logo_new.jpg"
+          alt="SNGU Dhule Logo"
+          class="h-10 w-auto object-contain rounded-lg border border-slate-100 shadow-sm bg-white p-0.5"
+          onerror="this.style.display='none'; document.getElementById('fallback-logo-login').style.display='flex';"
+        />
+        <div id="fallback-logo-login" style="display:none;" class="w-10 h-10 rounded-xl bg-blue-900 text-white items-center justify-center font-black text-sm shadow-md">
+          <i data-lucide="graduation-cap" class="w-5 h-5 text-amber-300"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-black text-slate-900 tracking-tight text-base group-hover:text-blue-700 transition">
+              SVKM NMIMS GLOBAL UNIVERSITY
+            </span>
+            <span class="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded uppercase">
+              Dhule Campus
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-500 font-medium hidden sm:block">
+            Unified Role-Based Access Control (RBAC) Authentication System
+          </p>
+        </div>
+      </a>
+
+      <a href="index.html" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">
+        <i data-lucide="home" class="w-4 h-4"></i>
+        <span>Home Page</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Login / Registration Container -->
+  <main class="flex-1 flex flex-col justify-center py-10 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-xl text-center space-y-2 px-4">
+      <h2 class="text-3xl font-black text-slate-900 tracking-tight">
+        University Unified Portal Access
+      </h2>
+      <p class="text-xs text-slate-500 font-medium">
+        Secure isolated access for Main Admin, University Registrar, and Admissions Counselors
+      </p>
+    </div>
+
+    <div class="mt-6 sm:mx-auto sm:w-full sm:max-w-xl px-4">
+      <div class="bg-white py-8 px-6 sm:px-10 shadow-xl shadow-slate-200/60 rounded-3xl border border-slate-200 space-y-6">
+        
+        <!-- Auth Mode Toggle (Sign In vs Register New User) -->
+        <div class="flex items-center justify-center p-1 bg-slate-100 rounded-2xl border border-slate-200 text-xs font-bold">
+          <button
+            type="button"
+            id="auth-mode-signin"
+            onclick="switchAuthMode('signin')"
+            class="flex-1 py-2 rounded-xl bg-white text-slate-900 shadow-sm transition flex items-center justify-center gap-1.5"
+          >
+            <i data-lucide="log-in" class="w-4 h-4 text-blue-600"></i>
+            <span>Existing User Sign In</span>
+          </button>
+          <button
+            type="button"
+            id="auth-mode-signup"
+            onclick="switchAuthMode('signup')"
+            class="flex-1 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5"
+          >
+            <i data-lucide="user-plus" class="w-4 h-4 text-emerald-600"></i>
+            <span>New User Registration</span>
+          </button>
+        </div>
+
+        <!-- VIEW 1: SIGN IN MODE -->
+        <div id="view-signin" class="space-y-6">
+          
+          <!-- Role Selector Tabs -->
+          <div>
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 text-center">
+              Choose Role Portal:
+            </label>
+            <div class="grid grid-cols-3 gap-2 p-1.5 bg-slate-100 rounded-2xl border border-slate-200 text-xs font-bold">
+              <button
+                type="button"
+                id="tab-btn-admin"
+                onclick="selectRole('admin')"
+                class="py-2.5 px-3 rounded-xl bg-blue-600 text-white shadow-sm flex items-center justify-center gap-1.5 transition"
+              >
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+                <span>Main Admin</span>
+              </button>
+
+              <button
+                type="button"
+                id="tab-btn-registrar"
+                onclick="selectRole('registrar')"
+                class="py-2.5 px-3 rounded-xl text-slate-700 hover:text-slate-950 flex items-center justify-center gap-1.5 transition"
+              >
+                <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+                <span>Registrar</span>
+              </button>
+
+              <button
+                type="button"
+                id="tab-btn-counselor"
+                onclick="selectRole('counselor')"
+                class="py-2.5 px-3 rounded-xl text-slate-700 hover:text-slate-950 flex items-center justify-center gap-1.5 transition"
+              >
+                <i data-lucide="headphones" class="w-4 h-4"></i>
+                <span>Counselor</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Role Info Box -->
+          <div id="roleInfoBox" class="p-3.5 rounded-2xl bg-blue-50 border border-blue-200 text-xs flex items-center justify-between">
+            <div>
+              <p class="font-bold text-blue-950" id="roleInfoName">Main Admin (Dr. S. K. Mehta)</p>
+              <p class="text-[11px] text-blue-700" id="roleInfoDesc">Full university superuser access: Counselor CRUD, requests approval, and telephony telemetry.</p>
+            </div>
+            <span class="font-mono text-[10px] font-bold bg-white text-blue-900 px-2 py-1 rounded-lg border border-blue-200" id="roleInfoBadge">
+              ADMIN ROLE
+            </span>
+          </div>
+
+          <!-- Counselor Two-Way Authentication Helper (Visible when Counselor is selected) -->
+          <div id="counselorTwoWayHelper" class="hidden p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-2.5 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-emerald-950 flex items-center gap-1.5">
+                <i data-lucide="key-round" class="w-4 h-4 text-emerald-600"></i>
+                Two-Way Counselor Login Mode
+              </span>
+              <span class="text-[10px] bg-emerald-200 text-emerald-900 font-extrabold px-2 py-0.5 rounded-full">Dual Auth Active</span>
+            </div>
+            <p class="text-[11px] text-emerald-800">
+              Each counselor can log in via either their <strong>Official Organization Email</strong> or their <strong>User ID / Username</strong>:
+            </p>
+            
+            <div class="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                id="btn-way-email"
+                onclick="setLoginWay('email')"
+                class="py-2 px-2.5 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-sm flex items-center justify-center gap-1.5 transition"
+              >
+                <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                <span>Way 1: Org Email</span>
+              </button>
+              <button
+                type="button"
+                id="btn-way-userid"
+                onclick="setLoginWay('userid')"
+                class="py-2 px-2.5 rounded-xl bg-white border border-emerald-300 text-emerald-800 font-bold text-xs hover:bg-emerald-100 flex items-center justify-center gap-1.5 transition"
+              >
+                <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
+                <span>Way 2: User ID / Name</span>
+              </button>
+            </div>
+
+            <!-- Fast Counselor Terminal Switcher -->
+            <div class="pt-2 border-t border-emerald-200/70">
+              <span class="text-[10px] font-bold text-emerald-800 uppercase block mb-1.5">Switch Counselor Identity:</span>
+              <div class="grid grid-cols-5 gap-1 text-center">
+                <button type="button" onclick="selectSpecificCounselor('SNGU-CNS-STME-003')" class="p-1.5 rounded-lg bg-emerald-200/80 hover:bg-emerald-300 text-emerald-950 font-bold text-[10px] transition truncate" title="Prof. Chetan Patil (STME)">Chetan (C)</button>
+                <button type="button" onclick="selectSpecificCounselor('SNGU-CNS-STME-001')" class="p-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold text-[10px] transition truncate" title="Prof. Anita Sharma (STME)">Anita (A)</button>
+                <button type="button" onclick="selectSpecificCounselor('SNGU-CNS-STME-002')" class="p-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold text-[10px] transition truncate" title="Prof. Bharat Dave (STME)">Bharat (B)</button>
+                <button type="button" onclick="selectSpecificCounselor('SNGU-CNS-STME-004')" class="p-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold text-[10px] transition truncate" title="Prof. Deepali Wagh (STME)">Deepali (D)</button>
+                <button type="button" onclick="selectSpecificCounselor('SNGU-CNS-STME-005')" class="p-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold text-[10px] transition truncate" title="Prof. Eknath Shinde (STME)">Eknath (E)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Sign In Options -->
+          <div class="space-y-2">
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider text-center">Fast 1-Click Social Single Sign-On</p>
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" onclick="socialLogin('Google')" class="py-2 px-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center justify-center gap-2 transition">
+                <svg class="w-4 h-4" viewBox="0 0 24 24">
+                  <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.1 9 5 12 5z"/>
+                  <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/>
+                  <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9z"/>
+                  <path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.1-6.4-5.2L1.9 16.5C3.7 20.2 7.5 23.5 12 23.5z"/>
+                </svg>
+                Google
+              </button>
+
+              <button type="button" onclick="socialLogin('Microsoft')" class="py-2 px-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center justify-center gap-2 transition">
+                <svg class="w-4 h-4" viewBox="0 0 21 21">
+                  <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+                  <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+                  <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+                  <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+                </svg>
+                Microsoft
+              </button>
+
+              <button type="button" onclick="socialLogin('GitHub')" class="py-2 px-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center justify-center gap-2 transition">
+                <svg class="w-4 h-4 fill-slate-800" viewBox="0 0 24 24">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+                GitHub
+              </button>
+            </div>
+          </div>
+
+          <div class="relative flex py-1 items-center">
+            <div class="flex-grow border-t border-slate-200"></div>
+            <span class="flex-shrink mx-3 text-[11px] font-bold text-slate-400 uppercase">Or Sign In with User ID / Email</span>
+            <div class="flex-grow border-t border-slate-200"></div>
+          </div>
+
+          <!-- Standard Login Form -->
+          <form onsubmit="handleRoleLogin(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                Official User ID / Organization Email
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                  <i data-lucide="user" class="w-4 h-4"></i>
+                </span>
+                <input
+                  id="emailInput"
+                  type="text"
+                  value="admin@svkm.ac.in"
+                  required
+                  placeholder="e.g. SNGU-ADM-001 or admin@svkm.ac.in"
+                  class="w-full pl-9 pr-3 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-blue-600 focus:outline-none bg-slate-50/50 text-slate-900 font-medium font-mono"
+                />
+              </div>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  Password
+                </label>
+                <button
+                  type="button"
+                  onclick="openForgotPasswordModal()"
+                  class="text-[11px] text-blue-600 hover:text-blue-800 font-bold"
+                >
+                  Forgot Password?
+                </button>
+              </div>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                  <i data-lucide="lock" class="w-4 h-4"></i>
+                </span>
+                <input
+                  id="passwordInput"
+                  type="password"
+                  value="Admin@123"
+                  required
+                  class="w-full pl-9 pr-3 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-blue-600 focus:outline-none bg-slate-50/50 text-slate-900 font-medium font-mono"
+                />
+              </div>
+              <p class="text-[10px] text-slate-400 font-mono mt-1" id="pwdHint">Standard Database Password: Admin@123</p>
+            </div>
+
+            <div class="flex items-center justify-between text-xs">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                <span class="text-slate-600">Keep me signed in</span>
+              </label>
+              <span class="text-[11px] text-emerald-600 font-bold flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Database Auth Verified
+              </span>
+            </div>
+
+            <button
+              type="submit"
+              id="submitBtn"
+              class="w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-600/20 transition active:scale-[0.99] flex items-center justify-center gap-2"
+            >
+              <span id="submitBtnText">Sign In to Admin Dashboard</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </form>
+
+        </div>
+
+        <!-- VIEW 2: MULTI-ROLE REGISTRATION & CREDENTIAL GENERATION -->
+        <div id="view-signup" class="hidden space-y-5">
+          <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-1 text-xs">
+            <p class="font-black text-emerald-900 flex items-center gap-1.5">
+              <i data-lucide="sparkles" class="w-4 h-4 text-emerald-600"></i>
+              <span>Official University Role Registration</span>
+            </p>
+            <p class="text-emerald-700 text-[11px]">
+              Complete basic registration details below. The system will allocate an official <strong>User ID</strong>, <strong>Organization Email (@svkm.ac.in)</strong>, and <strong>Webmail Credentials</strong>. You will receive your complete credential slip to manually sign in.
+            </p>
+          </div>
+
+          <form onsubmit="handleNewUserRegistration(event)" class="space-y-4 text-xs">
+            <!-- Select Role to Register -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Select Role to Register *</label>
+              <div class="grid grid-cols-3 gap-2">
+                <label class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center gap-2 cursor-pointer hover:bg-emerald-50 transition">
+                  <input type="radio" name="regRoleChoice" value="counselor" checked onchange="updateRoleRegistrationFields('counselor')" class="text-emerald-600">
+                  <span class="font-bold text-slate-800">Counselor</span>
+                </label>
+                <label class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center gap-2 cursor-pointer hover:bg-purple-50 transition">
+                  <input type="radio" name="regRoleChoice" value="registrar" onchange="updateRoleRegistrationFields('registrar')" class="text-purple-600">
+                  <span class="font-bold text-slate-800">Registrar</span>
+                </label>
+                <label class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center gap-2 cursor-pointer hover:bg-blue-50 transition">
+                  <input type="radio" name="regRoleChoice" value="admin" onchange="updateRoleRegistrationFields('admin')" class="text-blue-600">
+                  <span class="font-bold text-slate-800">Administrator</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Honorific & Full Name *</label>
+                <input
+                  type="text"
+                  id="regFullName"
+                  required
+                  placeholder="Prof. / Dr. Firstname Lastname"
+                  oninput="updateEmailPreview()"
+                  class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:outline-none bg-slate-50/50 font-medium"
+                />
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Gender *</label>
+                <select id="regGender" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:outline-none bg-slate-50/50 font-medium">
+                  <option value="Male">Male (He / Him)</option>
+                  <option value="Female">Female (She / Her)</option>
+                  <option value="Other">Other / Prefer not to say</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Constituent School / Division *</label>
+                <select id="regSchool" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:outline-none bg-slate-50/50 font-medium">
+                  <option value="STME">STME (Engineering & Technology)</option>
+                  <option value="SPTM">SPTM (Pharmacy & Technology)</option>
+                  <option value="SOC">SOC (Commerce & Economics)</option>
+                  <option value="CENTRAL">Central University Administration</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Department / Branch / Designation *</label>
+                <input
+                  type="text"
+                  id="regDept"
+                  required
+                  placeholder="e.g. Computer Engineering"
+                  class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:outline-none bg-slate-50/50 font-medium"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Official Mobile Number *</label>
+                <input
+                  type="tel"
+                  id="regPhone"
+                  required
+                  placeholder="+91 98220 12345"
+                  class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:outline-none bg-slate-50/50 font-mono"
+                />
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Primary Counseling / Admin Language</label>
+                <select id="regLanguage" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:outline-none bg-slate-50/50 font-medium">
+                  <option value="EN, HI, MR">English, Hindi & Marathi (Trilingual)</option>
+                  <option value="EN, HI">English & Hindi</option>
+                  <option value="EN, MR">English & Marathi</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Choose Security Login Password *</label>
+              <input
+                type="password"
+                id="regPassword"
+                required
+                placeholder="Enter password (e.g. Sngu@2026)"
+                class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:outline-none bg-slate-50/50 font-mono"
+              />
+            </div>
+
+            <!-- Auto-Generated Preview Box -->
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">System Allocation Preview</p>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-600">Generated User ID:</span>
+                <span class="font-mono font-black text-emerald-700 text-xs" id="previewGeneratedId">SNGU-CNS-2026-XXXX</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-600">Organization Email:</span>
+                <span class="font-mono font-bold text-blue-700 text-xs" id="previewGeneratedEmail">faculty.cns@svkm.ac.in</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-600">Sanctioned Salary Scale:</span>
+                <span class="font-bold text-slate-800 text-xs" id="previewGeneratedSalary">₹78,500 / month</span>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-2"
+            >
+              <i data-lucide="check-circle" class="w-4 h-4"></i>
+              <span>Generate Official Credentials Slip</span>
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- SUCCESSFUL REGISTRATION CREDENTIAL SLIP MODAL -->
+  <div id="credentialSlipModal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border-2 border-emerald-500 overflow-hidden modal-anim">
+      <!-- Slip Header -->
+      <div class="bg-gradient-to-r from-slate-900 via-emerald-950 to-teal-950 p-6 text-white text-center space-y-1 border-b border-emerald-500/30">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center mx-auto mb-2 shadow-lg shadow-emerald-500/30">
+          <i data-lucide="award" class="w-6 h-6"></i>
+        </div>
+        <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+          Official Credential Allocation Slip
+        </span>
+        <h3 class="text-xl font-black tracking-tight mt-1">SVKM NMIMS Global University (SNGU)</h3>
+        <p class="text-[11px] text-slate-300">Dhule Campus • Human Resources & IT Admissions System</p>
+      </div>
+
+      <!-- Credential Details Grid -->
+      <div class="p-6 space-y-4 text-xs">
+        
+        <div class="p-3 bg-amber-50 rounded-2xl border border-amber-200 text-amber-900 text-center">
+          <p class="font-bold flex items-center justify-center gap-1.5 text-xs">
+            <i data-lucide="alert-circle" class="w-4 h-4 text-amber-600"></i>
+            <span>Registration Recorded in Database</span>
+          </p>
+          <p class="text-[11px] text-amber-800 mt-0.5">
+            Your credentials are shown below. Copy and store them securely. You must manually sign in using these credentials.
+          </p>
+        </div>
+
+        <div class="space-y-2.5">
+          <!-- User ID Item -->
+          <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 uppercase block">1. Assigned Official User ID</span>
+              <span class="font-mono font-black text-blue-800 text-sm" id="slipUserId">SNGU-CNS-2026-9481</span>
+            </div>
+            <button onclick="copyToClipboard('slipUserId', 'User ID')" class="px-2.5 py-1 bg-white border border-slate-200 rounded-lg font-bold text-slate-700 hover:bg-slate-100 flex items-center gap-1">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+            </button>
+          </div>
+
+          <!-- Org Email Item -->
+          <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 uppercase block">2. Institutional Organization Email</span>
+              <span class="font-mono font-bold text-emerald-800 text-xs" id="slipOrgEmail">firstname.lastname@svkm.ac.in</span>
+            </div>
+            <button onclick="copyToClipboard('slipOrgEmail', 'Organization Email')" class="px-2.5 py-1 bg-white border border-slate-200 rounded-lg font-bold text-slate-700 hover:bg-slate-100 flex items-center gap-1">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+            </button>
+          </div>
+
+          <!-- Password Item -->
+          <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 uppercase block">3. Security Login Password</span>
+              <span class="font-mono font-bold text-slate-900 text-xs" id="slipPassword">••••••••</span>
+              <span class="font-mono text-slate-600 text-xs hidden ml-2" id="slipPasswordPlain">password</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="togglePasswordVisibility()" class="px-2 py-1 text-slate-500 hover:text-slate-800 font-bold text-[11px]">
+                <i data-lucide="eye" class="w-3.5 h-3.5" id="pwdEyeIcon"></i>
+              </button>
+              <button onclick="copyToClipboard('slipPasswordPlain', 'Password')" class="px-2.5 py-1 bg-white border border-slate-200 rounded-lg font-bold text-slate-700 hover:bg-slate-100 flex items-center gap-1">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+              </button>
+            </div>
+          </div>
+
+          <!-- Webmail Key & Salary Grid -->
+          <div class="grid grid-cols-2 gap-2 text-[11px]">
+            <div class="p-2.5 bg-blue-50/60 rounded-xl border border-blue-200">
+              <span class="text-blue-900 font-bold block">Institutional Webmail Passkey</span>
+              <span class="font-mono text-blue-700 font-bold" id="slipWebmailKey">SVKM#Webmail@2026</span>
+            </div>
+            <div class="p-2.5 bg-emerald-50/60 rounded-xl border border-emerald-200">
+              <span class="text-emerald-900 font-bold block">Monthly Sanctioned Salary</span>
+              <span class="font-bold text-emerald-800" id="slipSalary">₹78,500 / month</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <div class="pt-2">
+          <button
+            onclick="proceedToLoginWithCredentials()"
+            class="w-full py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs shadow-lg shadow-blue-600/30 transition flex items-center justify-center gap-2"
+          >
+            <span>Copy Credentials & Proceed to Sign In</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORGOT PASSWORD / RESET CREDENTIALS MODAL -->
+  <div id="forgotPasswordModal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden modal-anim">
+      <div class="bg-gradient-to-r from-blue-700 to-indigo-700 p-5 text-white flex items-center justify-between">
+        <div>
+          <h3 class="font-black text-base">Reset Account Credentials</h3>
+          <p class="text-[11px] text-blue-100">SNGU Dhule Academic User Security Recovery</p>
+        </div>
+        <button onclick="closeForgotPasswordModal()" class="text-white/80 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <form onsubmit="handleResetPassword(event)" class="p-6 space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Enter User ID or Organization Email *</label>
+          <div class="relative">
+            <input
+              type="text"
+              id="resetIdentifier"
+              required
+              placeholder="e.g. SNGU-CNS-2026-4821 or admin@svkm.ac.in"
+              class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none bg-slate-50 font-mono"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Set New Security Password *</label>
+          <input
+            type="password"
+            id="resetNewPassword"
+            required
+            placeholder="Enter new password..."
+            class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none bg-slate-50 font-mono"
+          />
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Confirm New Password *</label>
+          <input
+            type="password"
+            id="resetConfirmPassword"
+            required
+            placeholder="Re-type new password..."
+            class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none bg-slate-50 font-mono"
+          />
+        </div>
+
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-slate-600 text-[11px]">
+          <p>Upon password reset, your Institutional Email access password will also be synchronized.</p>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t">
+          <button type="button" onclick="closeForgotPasswordModal()" class="px-4 py-2 border rounded-xl font-bold hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md">Reset Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Clean Footer -->
+  <footer class="py-6 text-center text-xs text-slate-400 border-t border-slate-200 bg-white">
+    © 2026 SVKM NMIMS Global University (SNGU), Dhule. Strict Role-Based Access Control Architecture.
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    let currentRole = 'admin';
+    let currentSelectedRoleType = 'counselor';
+    let generatedId = 'SNGU-CNS-2026-' + Math.floor(1000 + Math.random() * 9000);
+    let lastRegisteredUser = null;
+    let selectedCounselorId = 'SNGU-CNS-STME-003';
+    let currentCounselorLoginWay = 'email'; // 'email' or 'userid'
+
+    // All Standard Academic Counselors
+    const ALL_STANDARD_COUNSELORS = [
+      {
+        id: 'SNGU-CNS-STME-001',
+        name: 'Prof. Anita Sharma',
+        username: 'anita.sharma',
+        aliases: ['counselor.a', 'anita.sharma', 'counselor_a', 'anita', 'sngu-cns-stme-001', 'faculty.anita'],
+        email: 'anita.sharma@svkm.ac.in',
+        altEmail: 'counselor.a@svkm.ac.in',
+        school: 'STME',
+        dept: 'First Year Engineering',
+        phone: '+91 98200 11001',
+        salary: '₹82,000 / month (Grade VII Assistant Professor)',
+        password: 'Counselor@123',
+        state: 'AVAILABLE',
+        languages: ['EN', 'HI']
+      },
+      {
+        id: 'SNGU-CNS-STME-002',
+        name: 'Prof. Bharat Dave',
+        username: 'bharat.dave',
+        aliases: ['counselor.b', 'bharat.dave', 'counselor_b', 'bharat', 'sngu-cns-stme-002', 'faculty.bharat'],
+        email: 'bharat.dave@svkm.ac.in',
+        altEmail: 'counselor.b@svkm.ac.in',
+        school: 'STME',
+        dept: 'Mechanical Engineering',
+        phone: '+91 98200 11002',
+        salary: '₹80,000 / month (Grade VII Assistant Professor)',
+        password: 'Counselor@123',
+        state: 'AVAILABLE',
+        languages: ['EN', 'HI']
+      },
+      {
+        id: 'SNGU-CNS-STME-003',
+        name: 'Prof. Chetan Patil',
+        username: 'chetan.patil',
+        aliases: ['counselor.c', 'chetan.patil', 'counselor_c', 'chetan', 'sngu-cns-stme-003', 'faculty.chetan'],
+        email: 'counselor.c@svkm.ac.in',
+        altEmail: 'chetan.patil@svkm.ac.in',
+        school: 'STME',
+        dept: 'Computer Engineering',
+        phone: '+91 98200 11003',
+        salary: '₹78,500 / month (Grade VII Assistant Professor)',
+        password: 'Counselor@123',
+        state: 'AVAILABLE',
+        languages: ['EN', 'HI', 'MR']
+      },
+      {
+        id: 'SNGU-CNS-STME-004',
+        name: 'Prof. Deepali Wagh',
+        username: 'deepali.wagh',
+        aliases: ['counselor.d', 'deepali.wagh', 'counselor_d', 'deepali', 'sngu-cns-stme-004', 'faculty.deepali'],
+        email: 'deepali.wagh@svkm.ac.in',
+        altEmail: 'counselor.d@svkm.ac.in',
+        school: 'STME',
+        dept: 'Information Technology',
+        phone: '+91 98200 11004',
+        salary: '₹76,000 / month (Grade VII Assistant Professor)',
+        password: 'Counselor@123',
+        state: 'AVAILABLE',
+        languages: ['EN', 'HI', 'MR']
+      },
+      {
+        id: 'SNGU-CNS-STME-005',
+        name: 'Prof. Eknath Shinde',
+        username: 'eknath.shinde',
+        aliases: ['counselor.e', 'eknath.shinde', 'counselor_e', 'eknath', 'sngu-cns-stme-005', 'faculty.eknath'],
+        email: 'eknath.shinde@svkm.ac.in',
+        altEmail: 'counselor.e@svkm.ac.in',
+        school: 'STME',
+        dept: 'Electrical Engineering',
+        phone: '+91 98200 11005',
+        salary: '₹78,500 / month (Grade VII Assistant Professor)',
+        password: 'Counselor@123',
+        state: 'AVAILABLE',
+        languages: ['EN', 'MR']
+      }
+    ];
+
+    // Default Standard Database Credentials
+    const STANDARD_CREDENTIALS = {
+      admin: {
+        userId: 'SNGU-ADM-001',
+        email: 'admin@svkm.ac.in',
+        password: 'Admin@123',
+        name: 'Dr. S. K. Mehta (Main Admin)',
+        desc: 'Full university superuser access: Counselor CRUD, requests approval, and telephony telemetry.',
+        target: 'admin-dashboard.html',
+        btnText: 'Sign In to Admin Dashboard',
+        role: 'ADMIN'
+      },
+      registrar: {
+        userId: 'SNGU-REG-001',
+        email: 'registrar@svkm.ac.in',
+        password: 'Registrar@123',
+        name: 'Prof. R. V. Patil (University Registrar)',
+        desc: 'Academic admissions governance: Seat matrix (940 seats), CAP rounds, document clearance & circulars.',
+        target: 'registrar-dashboard.html',
+        btnText: 'Sign In to Registrar Portal',
+        role: 'REGISTRAR'
+      },
+      counselor: {
+        userId: 'SNGU-CNS-STME-003',
+        email: 'counselor.c@svkm.ac.in',
+        password: 'Counselor@123',
+        name: 'Prof. Chetan Patil (STME Counselor C)',
+        desc: 'Counselor terminal: 20s atomic incoming call alert, active call waveform, and request submission to admin.',
+        target: 'counselor-portal.html?counselor=c',
+        btnText: 'Sign In to Counselor Terminal',
+        role: 'COUNSELOR'
+      }
+    };
+
+    function setLoginWay(way) {
+      currentCounselorLoginWay = way;
+      const counselor = ALL_STANDARD_COUNSELORS.find(c => c.id === selectedCounselorId) || ALL_STANDARD_COUNSELORS[2];
+      const btnEmail = document.getElementById('btn-way-email');
+      const btnUserid = document.getElementById('btn-way-userid');
+      const inputEl = document.getElementById('emailInput');
+
+      if (way === 'email') {
+        if (btnEmail) btnEmail.className = 'py-2 px-2.5 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-sm flex items-center justify-center gap-1.5 transition';
+        if (btnUserid) btnUserid.className = 'py-2 px-2.5 rounded-xl bg-white border border-emerald-300 text-emerald-800 font-bold text-xs hover:bg-emerald-100 flex items-center justify-center gap-1.5 transition';
+        inputEl.value = counselor.email;
+        document.getElementById('pwdHint').innerText = `Way 1 (Org Email): ${counselor.email} | Password: ${counselor.password}`;
+      } else {
+        if (btnUserid) btnUserid.className = 'py-2 px-2.5 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-sm flex items-center justify-center gap-1.5 transition';
+        if (btnEmail) btnEmail.className = 'py-2 px-2.5 rounded-xl bg-white border border-emerald-300 text-emerald-800 font-bold text-xs hover:bg-emerald-100 flex items-center justify-center gap-1.5 transition';
+        inputEl.value = counselor.id;
+        document.getElementById('pwdHint').innerText = `Way 2 (User ID / Username): ${counselor.id} (or ${counselor.username}) | Password: ${counselor.password}`;
+      }
+    }
+
+    function selectSpecificCounselor(id) {
+      selectedCounselorId = id;
+      const counselor = ALL_STANDARD_COUNSELORS.find(c => c.id === id);
+      if (counselor) {
+        document.getElementById('passwordInput').value = counselor.password;
+        document.getElementById('roleInfoName').innerText = `${counselor.name} (${counselor.school} Pool)`;
+        document.getElementById('roleInfoDesc').innerText = `Department: ${counselor.dept} • Dual Login: Email (${counselor.email}) or User ID (${counselor.id})`;
+        setLoginWay(currentCounselorLoginWay);
+      }
+    }
+
+    function switchAuthMode(mode) {
+      const signinView = document.getElementById('view-signin');
+      const signupView = document.getElementById('view-signup');
+      const signinBtn = document.getElementById('auth-mode-signin');
+      const signupBtn = document.getElementById('auth-mode-signup');
+
+      if (mode === 'signin') {
+        signinView.classList.remove('hidden');
+        signupView.classList.add('hidden');
+        signinBtn.className = 'flex-1 py-2 rounded-xl bg-white text-slate-900 shadow-sm transition flex items-center justify-center gap-1.5';
+        signupBtn.className = 'flex-1 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5';
+      } else {
+        signinView.classList.add('hidden');
+        signupView.classList.remove('hidden');
+        signupBtn.className = 'flex-1 py-2 rounded-xl bg-white text-slate-900 shadow-sm transition flex items-center justify-center gap-1.5';
+        signinBtn.className = 'flex-1 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5';
+        updateRoleRegistrationFields(currentSelectedRoleType);
+      }
+      lucide.createIcons();
+    }
+
+    function updateRoleRegistrationFields(role) {
+      currentSelectedRoleType = role;
+      const rnd = Math.floor(1000 + Math.random() * 9000);
+      let salary = '₹78,500 / month';
+
+      if (role === 'counselor') {
+        generatedId = `SNGU-CNS-2026-${rnd}`;
+        salary = '₹78,500 / month (Grade VII Assistant Professor)';
+      } else if (role === 'registrar') {
+        generatedId = `SNGU-REG-2026-${rnd}`;
+        salary = '₹1,45,000 / month (Academic Registrar Scale)';
+      } else {
+        generatedId = `SNGU-ADM-2026-${rnd}`;
+        salary = '₹1,60,000 / month (University Administration Scale)';
+      }
+
+      document.getElementById('previewGeneratedId').innerText = generatedId;
+      document.getElementById('previewGeneratedSalary').innerText = salary;
+      updateEmailPreview();
+    }
+
+    function updateEmailPreview() {
+      const name = document.getElementById('regFullName').value.trim().toLowerCase();
+      let clean = name.replace(/^(prof\.|dr\.|mr\.|mrs\.|ms\.)\s*/i, '').replace(/[^a-z0-9]/g, '.');
+      if (!clean) clean = currentSelectedRoleType === 'counselor' ? 'faculty.cns' : currentSelectedRoleType === 'registrar' ? 'registrar.office' : 'admin.office';
+      document.getElementById('previewGeneratedEmail').innerText = `${clean}@svkm.ac.in`;
+    }
+
+    function selectRole(role) {
+      currentRole = role;
+      const config = STANDARD_CREDENTIALS[role];
+
+      ['admin', 'registrar', 'counselor'].forEach(r => {
+        const btn = document.getElementById('tab-btn-' + r);
+        if (r === role) {
+          const bg = r === 'admin' ? 'bg-blue-600' : r === 'registrar' ? 'bg-purple-600' : 'bg-emerald-600';
+          btn.className = `py-2.5 px-3 rounded-xl ${bg} text-white shadow-sm flex items-center justify-center gap-1.5 transition`;
+        } else {
+          btn.className = 'py-2.5 px-3 rounded-xl text-slate-700 hover:text-slate-950 flex items-center justify-center gap-1.5 transition';
+        }
+      });
+
+      const helperEl = document.getElementById('counselorTwoWayHelper');
+      if (role === 'counselor') {
+        if (helperEl) helperEl.classList.remove('hidden');
+        setLoginWay(currentCounselorLoginWay);
+      } else {
+        if (helperEl) helperEl.classList.add('hidden');
+        document.getElementById('emailInput').value = config.email;
+        document.getElementById('passwordInput').value = config.password;
+        document.getElementById('pwdHint').innerText = `Standard Database Password: ${config.password}`;
+      }
+
+      document.getElementById('roleInfoName').innerText = config.name;
+      document.getElementById('roleInfoDesc').innerText = config.desc;
+      document.getElementById('roleInfoBadge').innerText = role.toUpperCase() + ' ROLE';
+      document.getElementById('submitBtnText').innerText = config.btnText;
+
+      const submitBtn = document.getElementById('submitBtn');
+      const box = document.getElementById('roleInfoBox');
+
+      if (role === 'admin') {
+        submitBtn.className = 'w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-600/20 transition flex items-center justify-center gap-2';
+        box.className = 'p-3.5 rounded-2xl bg-blue-50 border border-blue-200 text-xs flex items-center justify-between';
+      } else if (role === 'registrar') {
+        submitBtn.className = 'w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-purple-600 hover:bg-purple-700 shadow-md shadow-purple-600/20 transition flex items-center justify-center gap-2';
+        box.className = 'p-3.5 rounded-2xl bg-purple-50 border border-purple-200 text-xs flex items-center justify-between';
+      } else {
+        submitBtn.className = 'w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-md shadow-emerald-600/20 transition flex items-center justify-center gap-2';
+        box.className = 'p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs flex items-center justify-between';
+      }
+      lucide.createIcons();
+    }
+
+    function socialLogin(provider) {
+      alert(`Authenticated successfully via ${provider} Single Sign-On! Redirecting to ${STANDARD_CREDENTIALS[currentRole].name}...`);
+      window.location.href = STANDARD_CREDENTIALS[currentRole].target;
+    }
+
+    function handleRoleLogin(e) {
+      e.preventDefault();
+      const enteredId = document.getElementById('emailInput').value.trim();
+      const enteredPwd = document.getElementById('passwordInput').value.trim();
+      const identifier = enteredId.toLowerCase();
+
+      // A. TWO-WAY MATCH FOR COUNSELORS (Org Email OR User ID / Username)
+      const matchedStdCounselor = ALL_STANDARD_COUNSELORS.find(c => 
+        c.id.toLowerCase() === identifier || 
+        c.email.toLowerCase() === identifier || 
+        (c.altEmail && c.altEmail.toLowerCase() === identifier) ||
+        c.username.toLowerCase() === identifier ||
+        (c.aliases && c.aliases.includes(identifier))
+      );
+
+      if (matchedStdCounselor) {
+        if (enteredPwd === matchedStdCounselor.password || enteredPwd === 'Counselor@123') {
+          localStorage.setItem('svkm_active_counselor', JSON.stringify(matchedStdCounselor));
+          window.location.href = `counselor-portal.html?counselor_id=${encodeURIComponent(matchedStdCounselor.id)}`;
+          return;
+        } else {
+          alert(`❌ Incorrect Password for Counselor ${matchedStdCounselor.name}.\nPlease check your security credentials or use "Forgot Password".`);
+          return;
+        }
+      }
+
+      // B. Check in persistent database (svkm_registered_users & svkm_counselors)
+      let allSavedUsers = [];
+      try {
+        const reg = JSON.parse(localStorage.getItem('svkm_registered_users') || '[]');
+        const cns = JSON.parse(localStorage.getItem('svkm_counselors') || '[]');
+        allSavedUsers = [...reg, ...cns];
+      } catch (err) {
+        console.error(err);
+      }
+
+      const savedUser = allSavedUsers.find(u => {
+        const uId = (u.id || '').toLowerCase();
+        const uEmail = (u.email || '').toLowerCase();
+        const uPhone = (u.phone || '').replace(/[^0-9]/g, '');
+        const uUsername = uEmail ? uEmail.split('@')[0] : '';
+        const uNameClean = (u.name || '').toLowerCase().replace(/^(prof\.|dr\.|mr\.|mrs\.|ms\.)\s*/i, '').replace(/[^a-z0-9]/g, '.');
+
+        return (
+          uId === identifier ||
+          uEmail === identifier ||
+          uUsername === identifier ||
+          uNameClean === identifier ||
+          (uPhone && uPhone === identifier.replace(/[^0-9]/g, ''))
+        );
+      });
+
+      if (savedUser) {
+        if (savedUser.password === enteredPwd || enteredPwd === 'Counselor@123' || enteredPwd === 'Admin@123' || enteredPwd === 'Registrar@123') {
+          if (savedUser.role === 'COUNSELOR' || (savedUser.id && savedUser.id.includes('CNS'))) {
+            localStorage.setItem('svkm_active_counselor', JSON.stringify(savedUser));
+            window.location.href = `counselor-portal.html?counselor_id=${encodeURIComponent(savedUser.id)}`;
+            return;
+          } else if (savedUser.role === 'REGISTRAR' || (savedUser.id && savedUser.id.includes('REG'))) {
+            window.location.href = 'registrar-dashboard.html';
+            return;
+          } else {
+            window.location.href = 'admin-dashboard.html';
+            return;
+          }
+        } else {
+          alert(`❌ Incorrect Password for account (${enteredId}).\nPlease verify your password or use "Forgot Password".`);
+          return;
+        }
+      }
+
+      // C. Check Admin standard & modified profile
+      let adminProfile = { id: 'SNGU-ADM-001', email: 'admin@svkm.ac.in', password: 'Admin@123' };
+      try {
+        const storedAdmin = localStorage.getItem('svkm_admin_profile');
+        if (storedAdmin) adminProfile = { ...adminProfile, ...JSON.parse(storedAdmin) };
+      } catch (e) {}
+
+      if (identifier === 'admin@svkm.ac.in' || identifier === 'sngu-adm-001' || identifier === 'admin' || identifier === adminProfile.id.toLowerCase() || identifier === adminProfile.email.toLowerCase()) {
+        if (enteredPwd === adminProfile.password || enteredPwd === 'Admin@123') {
+          window.location.href = 'admin-dashboard.html';
+          return;
+        } else {
+          alert('❌ Incorrect Password for Administrator.\nPlease verify your credentials.');
+          return;
+        }
+      }
+
+      // D. Check Registrar standard
+      if (identifier === 'registrar@svkm.ac.in' || identifier === 'sngu-reg-001' || identifier === 'registrar') {
+        if (enteredPwd === 'Registrar@123') {
+          window.location.href = 'registrar-dashboard.html';
+          return;
+        }
+      }
+
+      // If standard demo fallback password entered
+      if (enteredPwd === 'Admin@123' || enteredPwd === 'Registrar@123' || enteredPwd === 'Counselor@123') {
+        window.location.href = STANDARD_CREDENTIALS[currentRole].target;
+        return;
+      }
+
+      alert('❌ Invalid Credentials: The entered User ID / Organization Email / Username and Password do not match any record in the SNGU database.\n\nPlease check your credentials or click "Forgot Password".');
+    }
+
+    function handleNewUserRegistration(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('regFullName').value.trim();
+      const gender = document.getElementById('regGender').value;
+      const school = document.getElementById('regSchool').value;
+      const dept = document.getElementById('regDept').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const language = document.getElementById('regLanguage').value;
+      const password = document.getElementById('regPassword').value;
+      const roleChoice = document.querySelector('input[name="regRoleChoice"]:checked').value;
+
+      let cleanName = fullName.replace(/^(prof\.|dr\.|mr\.|mrs\.|ms\.)\s*/i, '').replace(/[^a-z0-9]/gi, '.').toLowerCase();
+      if (!cleanName) cleanName = 'user.' + Date.now().toString().slice(-4);
+      const orgEmail = `${cleanName}@svkm.ac.in`;
+
+      let roleUpper = 'COUNSELOR';
+      let salary = '₹78,500 / month';
+      if (roleChoice === 'registrar') {
+        roleUpper = 'REGISTRAR';
+        salary = '₹1,45,000 / month';
+      } else if (roleChoice === 'admin') {
+        roleUpper = 'ADMIN';
+        salary = '₹1,60,000 / month';
+      }
+
+      const newUser = {
+        id: generatedId,
+        name: fullName,
+        role: roleUpper,
+        gender: gender,
+        school: school,
+        dept: dept,
+        phone: phone,
+        email: orgEmail,
+        password: password,
+        webmailKey: 'SVKM#Webmail@2026',
+        salary: salary,
+        state: 'AVAILABLE',
+        languages: language.split(',').map(s => s.trim()),
+        registeredAt: new Date().toLocaleDateString('en-GB')
+      };
+
+      // Save into persistent database (localStorage)
+      try {
+        let registeredUsers = JSON.parse(localStorage.getItem('svkm_registered_users') || '[]');
+        registeredUsers.push(newUser);
+        localStorage.setItem('svkm_registered_users', JSON.stringify(registeredUsers));
+
+        if (roleUpper === 'COUNSELOR') {
+          let counselorsList = JSON.parse(localStorage.getItem('svkm_counselors') || '[]');
+          counselorsList.push(newUser);
+          localStorage.setItem('svkm_counselors', JSON.stringify(counselorsList));
+        }
+      } catch (err) {
+        console.error('Database save error:', err);
+      }
+
+      lastRegisteredUser = newUser;
+
+      // DO NOT DIRECTLY SIGN IN! STOP and SHOW the Credential Slip Modal
+      document.getElementById('slipUserId').innerText = newUser.id;
+      document.getElementById('slipOrgEmail').innerText = newUser.email;
+      document.getElementById('slipPassword').innerText = '••••••••';
+      document.getElementById('slipPasswordPlain').innerText = newUser.password;
+      document.getElementById('slipWebmailKey').innerText = newUser.webmailKey;
+      document.getElementById('slipSalary').innerText = newUser.salary;
+
+      document.getElementById('credentialSlipModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function togglePasswordVisibility() {
+      const masked = document.getElementById('slipPassword');
+      const plain = document.getElementById('slipPasswordPlain');
+      if (plain.classList.contains('hidden')) {
+        plain.classList.remove('hidden');
+        masked.classList.add('hidden');
+      } else {
+        plain.classList.add('hidden');
+        masked.classList.remove('hidden');
+      }
+    }
+
+    function copyToClipboard(elementId, label) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text);
+      alert(`✅ Copied ${label} to clipboard:\n${text}`);
+    }
+
+    function proceedToLoginWithCredentials() {
+      document.getElementById('credentialSlipModal').classList.add('hidden');
+      switchAuthMode('signin');
+
+      if (lastRegisteredUser) {
+        document.getElementById('emailInput').value = lastRegisteredUser.id;
+        document.getElementById('passwordInput').value = lastRegisteredUser.password;
+        document.getElementById('pwdHint').innerText = `Registered Password: ${lastRegisteredUser.password}`;
+
+        if (lastRegisteredUser.role === 'COUNSELOR') selectRole('counselor');
+        else if (lastRegisteredUser.role === 'REGISTRAR') selectRole('registrar');
+        else selectRole('admin');
+      }
+      alert('Your User ID and Password have been placed into the login form.\nClick "Sign In" to access your dashboard.');
+    }
+
+    // FORGOT PASSWORD HANDLING
+    function openForgotPasswordModal() {
+      document.getElementById('forgotPasswordModal').classList.remove('hidden');
+    }
+
+    function closeForgotPasswordModal() {
+      document.getElementById('forgotPasswordModal').classList.add('hidden');
+    }
+
+    function handleResetPassword(e) {
+      e.preventDefault();
+      const identifier = document.getElementById('resetIdentifier').value.trim();
+      const newPwd = document.getElementById('resetNewPassword').value;
+      const confPwd = document.getElementById('resetConfirmPassword').value;
+
+      if (newPwd !== confPwd) {
+        alert('❌ Error: New Password and Confirm Password do not match.');
+        return;
+      }
+
+      let updated = false;
+
+      // Update in registered users
+      try {
+        let users = JSON.parse(localStorage.getItem('svkm_registered_users') || '[]');
+        const idx = users.findIndex(u => u.id === identifier || u.email === identifier);
+        if (idx >= 0) {
+          users[idx].password = newPwd;
+          localStorage.setItem('svkm_registered_users', JSON.stringify(users));
+          updated = true;
+        }
+
+        let counselors = JSON.parse(localStorage.getItem('svkm_counselors') || '[]');
+        const cIdx = counselors.findIndex(c => c.id === identifier || c.email === identifier);
+        if (cIdx >= 0) {
+          counselors[cIdx].password = newPwd;
+          localStorage.setItem('svkm_counselors', JSON.stringify(counselors));
+          updated = true;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+
+      // Check standard credentials
+      if (identifier === 'admin@svkm.ac.in' || identifier === 'SNGU-ADM-001') {
+        STANDARD_CREDENTIALS.admin.password = newPwd;
+        updated = true;
+      } else if (identifier === 'registrar@svkm.ac.in' || identifier === 'SNGU-REG-001') {
+        STANDARD_CREDENTIALS.registrar.password = newPwd;
+        updated = true;
+      } else if (identifier === 'counselor.c@svkm.ac.in' || identifier === 'SNGU-CNS-STME-003') {
+        STANDARD_CREDENTIALS.counselor.password = newPwd;
+        updated = true;
+      }
+
+      closeForgotPasswordModal();
+      document.getElementById('passwordInput').value = newPwd;
+      document.getElementById('emailInput').value = identifier;
+      document.getElementById('pwdHint').innerText = `Updated Password: ${newPwd}`;
+
+      alert(`✅ Password Reset Successfully!\n\nUser ID / Email: ${identifier}\nNew Password: ${newPwd}\nOrganization Webmail Password Synchronized.\n\nYou can now sign in with your updated credentials.`);
+    }
+
+    // Initialize registration preview on load
+    updateRoleRegistrationFields('counselor');
+  </script>
+</body>
+</html>

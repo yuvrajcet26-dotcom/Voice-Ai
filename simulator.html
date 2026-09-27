@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Multilingual Voice Call Simulator | SVKM Global University, Dhule</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    @keyframes wave-animation {
+      0%, 100% { height: 6px; }
+      50% { height: 32px; }
+    }
+    .wave-active {
+      animation: wave-animation 0.8s ease-in-out infinite;
+    }
+    .call-pulse {
+      animation: call-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    @keyframes call-ping {
+      75%, 100% {
+        transform: scale(1.6);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+
+  <!-- Role-Isolated Header -->
+  <header class="bg-white/95 backdrop-blur border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <img
+          src="https://www.svkmnmimsgu.ac.in/images/sngu_logo_new.jpg"
+          alt="SNGU Dhule Logo"
+          class="h-10 w-auto object-contain rounded-lg border border-slate-100 shadow-sm bg-white p-0.5"
+          onerror="this.style.display='none'; document.getElementById('fallback-logo-sim').style.display='flex';"
+        />
+        <div id="fallback-logo-sim" style="display:none;" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-700 items-center justify-center text-white shadow-md">
+          <i data-lucide="phone-call" class="w-6 h-6 animate-pulse"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-extrabold text-slate-900 tracking-tight text-base sm:text-lg group-hover:text-emerald-700 transition">
+              SNGU Dhule Multilingual Voice Call Simulator
+            </h1>
+            <span class="bg-blue-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase">
+              Live TTS Active
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-500 font-medium hidden sm:block">
+            Virtual Helpline +91 2562 281456 • Inbound Call → AI Agent → Live STME Counselor Transfer
+          </p>
+        </div>
+      </a>
+
+      <!-- Audio Mute & Language Controls -->
+      <div class="flex items-center gap-3">
+        <!-- Audio Enable/Mute Toggle -->
+        <button id="audioToggleBtn" onclick="toggleAudio()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 text-xs font-bold transition shadow-sm">
+          <i id="audioIcon" data-lucide="volume-2" class="w-4 h-4 text-emerald-600"></i>
+          <span id="audioText">Voice Audio: ON</span>
+        </button>
+
+        <a href="index.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-bold transition">
+          <i data-lucide="home" class="w-3.5 h-3.5"></i>
+          <span>Home Page</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3 Language Selector Banner -->
+  <div class="bg-blue-900 text-white py-3 px-4 shadow-inner">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-2">
+        <i data-lucide="globe" class="w-4 h-4 text-amber-300"></i>
+        <span class="font-bold">Select Voice Language for Live Call Simulation:</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="lang-btn-en" onclick="setLanguage('en')" class="px-3.5 py-1.5 rounded-xl font-black transition flex items-center gap-1.5 bg-white text-blue-900 shadow">
+          <span>🇬🇧 English</span>
+        </button>
+        <button id="lang-btn-hi" onclick="setLanguage('hi')" class="px-3.5 py-1.5 rounded-xl font-black transition flex items-center gap-1.5 bg-blue-800/80 text-blue-100 hover:bg-blue-800">
+          <span>🇮🇳 हिन्दी (Hindi)</span>
+        </button>
+        <button id="lang-btn-mr" onclick="setLanguage('mr')" class="px-3.5 py-1.5 rounded-xl font-black transition flex items-center gap-1.5 bg-blue-800/80 text-blue-100 hover:bg-blue-800">
+          <span>🚩 मराठी (Marathi)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Simulator Body -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+    <!-- Left Column: Virtual Smartphone / Handset Device -->
+    <div class="lg:col-span-5 space-y-6">
+      
+      <!-- Phone Handset Container -->
+      <div class="bg-white rounded-3xl border-2 border-slate-200 shadow-2xl overflow-hidden flex flex-col">
+        
+        <!-- Phone Top Bar -->
+        <div class="bg-slate-900 text-white p-4 flex items-center justify-between border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+            <span class="text-xs font-mono font-bold tracking-wider">Exotel Virtual ExoPhone</span>
+          </div>
+          <span class="text-[11px] font-mono text-slate-400" id="clockDisplay">12:00 PM</span>
+        </div>
+
+        <!-- Phone Active Screen -->
+        <div class="p-6 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 text-white flex-1 min-h-[360px] flex flex-col items-center justify-center text-center relative overflow-hidden">
+          
+          <!-- State 1: IDLE / DIAL SCREEN -->
+          <div id="screen-idle" class="w-full space-y-5">
+            <div class="relative inline-block mx-auto">
+              <div class="w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto border-2 border-emerald-500/40">
+                <i data-lucide="phone" class="w-10 h-10"></i>
+              </div>
+            </div>
+            <div>
+              <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Helpline Target</p>
+              <h3 class="text-2xl font-black font-mono text-white mt-1">+91 2562 281456</h3>
+              <p class="text-xs text-emerald-400 font-semibold mt-1">SVKM Global University, Dhule</p>
+            </div>
+            <p class="text-xs text-slate-400 max-w-xs mx-auto">
+              Click the button below to initiate an inbound call. The AI agent will answer first, answer your queries, and transfer you live to a human STME counselor.
+            </p>
+            <button onclick="startInboundCall()" class="w-full py-3.5 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/30 transition active:scale-[0.98] flex items-center justify-center gap-2">
+              <i data-lucide="phone-call" class="w-5 h-5"></i>
+              <span>CALL ADMISSION HELPLINE</span>
+            </button>
+          </div>
+
+          <!-- State 2: RINGING SCREEN -->
+          <div id="screen-ringing" class="hidden w-full space-y-6">
+            <div class="relative w-24 h-24 mx-auto flex items-center justify-center">
+              <div class="absolute inset-0 rounded-full bg-blue-500/30 call-pulse"></div>
+              <div class="w-20 h-20 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/50">
+                <i data-lucide="bell-ring" class="w-10 h-10 animate-bounce"></i>
+              </div>
+            </div>
+            <div>
+              <p class="text-xs text-amber-300 font-bold uppercase tracking-widest animate-pulse">Ringing Helpline...</p>
+              <h3 class="text-2xl font-black font-mono text-white mt-1">+91 2562 281456</h3>
+              <p class="text-xs text-slate-300 mt-1">Routing to SVKM Telephony AgentStream</p>
+            </div>
+            <div class="flex items-center justify-center gap-3 pt-2">
+              <button onclick="endCallSession()" class="px-5 py-2.5 rounded-full bg-red-600 hover:bg-red-700 text-white font-bold text-xs flex items-center gap-1.5 transition">
+                <i data-lucide="phone-off" class="w-4 h-4"></i> Cancel
+              </button>
+            </div>
+          </div>
+
+          <!-- State 3: CONNECTED SCREEN (AI AGENT OR COUNSELOR) -->
+          <div id="screen-connected" class="hidden w-full space-y-4">
+            
+            <!-- Call Header Badge -->
+            <div class="flex items-center justify-between w-full pb-2 border-b border-slate-800">
+              <div class="flex items-center gap-2">
+                <span id="callPartnerAvatar" class="w-7 h-7 rounded-lg bg-blue-600 text-white font-bold text-xs flex items-center justify-center">AI</span>
+                <div class="text-left">
+                  <p id="callPartnerName" class="text-xs font-bold text-white">SVKM AI Voice Agent</p>
+                  <p id="callPartnerSubtitle" class="text-[10px] text-emerald-400">Multilingual Assistant</p>
+                </div>
+              </div>
+              <span id="callSessionDuration" class="text-xs font-mono font-bold bg-slate-800 px-2 py-0.5 rounded text-slate-300">00:08</span>
+            </div>
+
+            <!-- Waveform Animation while speaking -->
+            <div class="bg-slate-950/80 p-4 rounded-2xl w-full flex items-center justify-between border border-slate-800">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span id="audioSpeakerLabel" class="text-[11px] font-bold text-slate-300">AI Agent Speaking</span>
+              </div>
+              <div class="flex items-center gap-1 h-8">
+                <div class="w-1 bg-emerald-400 rounded-full wave-active" style="animation-delay: 0.1s"></div>
+                <div class="w-1 bg-emerald-400 rounded-full wave-active" style="animation-delay: 0.3s"></div>
+                <div class="w-1 bg-emerald-400 rounded-full wave-active" style="animation-delay: 0.5s"></div>
+                <div class="w-1 bg-emerald-400 rounded-full wave-active" style="animation-delay: 0.2s"></div>
+                <div class="w-1 bg-emerald-400 rounded-full wave-active" style="animation-delay: 0.4s"></div>
+                <div class="w-1 bg-emerald-400 rounded-full wave-active" style="animation-delay: 0.6s"></div>
+                <div class="w-1 bg-emerald-400 rounded-full wave-active" style="animation-delay: 0.2s"></div>
+              </div>
+            </div>
+
+            <!-- Current Spoken Text Subtitles -->
+            <div class="bg-slate-800/80 p-3.5 rounded-2xl w-full text-left border border-slate-700">
+              <p class="text-[10px] uppercase font-bold text-amber-300 tracking-wider mb-1" id="subtitlesSpeakerTag">AI Voice Response:</p>
+              <p id="subtitlesText" class="text-xs text-white font-medium leading-relaxed italic">
+                "Welcome to SVKM Global University, Dhule..."
+              </p>
+            </div>
+
+            <!-- Handset Controls (Mute, Transfer, Hang up) -->
+            <div class="grid grid-cols-3 gap-2 w-full pt-2">
+              <button onclick="repeatSpeech()" class="py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 flex items-center justify-center gap-1 transition">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Replay
+              </button>
+              <button onclick="requestCounselorTransfer()" id="btnTransferDirect" class="py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-xs font-bold text-white flex items-center justify-center gap-1 transition shadow">
+                <i data-lucide="headphones" class="w-3.5 h-3.5"></i> Transfer
+              </button>
+              <button onclick="endCallSession()" class="py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-bold text-white flex items-center justify-center gap-1 transition shadow">
+                <i data-lucide="phone-off" class="w-3.5 h-3.5"></i> End
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Student Speech Actions (What the caller says) -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 space-y-3">
+        <div class="flex items-center justify-between">
+          <h4 class="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
+            <i data-lucide="message-square" class="w-4 h-4 text-blue-600"></i>
+            <span>Simulate Caller Speaking (Turn 2):</span>
+          </h4>
+          <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded" id="callerLangBadge">EN Mode</span>
+        </div>
+
+        <!-- 3 Quick Pre-set Prompts depending on active language -->
+        <div class="space-y-2" id="queryButtonsContainer">
+          <!-- Populated by JS based on language -->
+        </div>
+
+        <!-- Custom Speech Input -->
+        <div class="pt-2 flex items-center gap-2">
+          <input
+            id="customSpeechInput"
+            type="text"
+            placeholder="Type what you want to ask..."
+            class="flex-1 p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          />
+          <button
+            onclick="sendCustomCallerSpeech()"
+            class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1"
+          >
+            <i data-lucide="send" class="w-3.5 h-3.5"></i> Speak
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column: Live Conversation Transcript & 7-Stage Visual Routing Pipeline -->
+    <div class="lg:col-span-7 space-y-6">
+
+      <!-- Live Transcript Chat Log -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+              <span>Real-Time Call Transcript</span>
+              <span id="callStatusBadge" class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded-full">IDLE</span>
+            </h3>
+            <p class="text-xs text-slate-500">Live conversation turns with voice playback and intent extraction</p>
+          </div>
+          <button onclick="clearTranscript()" class="text-xs text-slate-400 hover:text-slate-600">Clear</button>
+        </div>
+
+        <!-- Scrollable Conversation Feed -->
+        <div id="transcriptFeed" class="space-y-3 max-h-80 overflow-y-auto pr-1 text-xs">
+          <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-center text-slate-400">
+            Click <strong>"CALL ADMISSION HELPLINE"</strong> on the phone handset to begin live call simulation.
+          </div>
+        </div>
+      </div>
+
+      <!-- 20-Second Atomic Lock Alert Card (Appears during counselor transfer) -->
+      <div id="counselorLockCard" class="hidden bg-gradient-to-r from-purple-900 to-indigo-900 text-white p-6 rounded-3xl shadow-xl space-y-4 animate-fadeIn border-2 border-purple-400">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-amber-400 animate-ping"></span>
+            <span class="font-extrabold text-amber-300 text-xs uppercase tracking-wider">STAGE 6: COUNSELOR DISPATCH POOL</span>
+          </div>
+          <span id="lockTimerSeconds" class="font-mono text-xs font-black bg-white/20 px-2 py-0.5 rounded">20s remaining</span>
+        </div>
+
+        <h4 class="text-lg font-black tracking-tight">Broadcasting Call to Available STME Counselors</h4>
+        <p class="text-xs text-purple-200 leading-relaxed">
+          Evaluating STME Counselor Pool: Counselors C (Prof. Chetan), D (Prof. Deepali), and E (Prof. Eknath) are AVAILABLE. Busy counselors A & B are skipped.
+        </p>
+
+        <!-- Lock Progress Bar -->
+        <div class="w-full bg-purple-950/60 rounded-full h-2 overflow-hidden">
+          <div id="lockProgressBar" class="bg-amber-400 h-2 transition-all duration-1000 ease-linear" style="width: 100%;"></div>
+        </div>
+
+        <!-- 3 Counselor Avatars & Race Lock Resolution -->
+        <div class="grid grid-cols-3 gap-3 pt-1 text-center text-xs">
+          <div id="counselor-box-c" class="p-3 rounded-xl bg-purple-800/80 border border-purple-400">
+            <p class="font-bold text-white">Prof. Chetan Patil</p>
+            <p class="text-[10px] text-purple-200">STME Pool C</p>
+            <span id="lock-badge-c" class="mt-2 inline-block text-[10px] font-black bg-amber-400 text-slate-950 px-2 py-0.5 rounded">ALERTING...</span>
+          </div>
+
+          <div id="counselor-box-d" class="p-3 rounded-xl bg-purple-900/60 border border-purple-700 opacity-80">
+            <p class="font-bold text-white">Prof. Deepali Wagh</p>
+            <p class="text-[10px] text-purple-200">STME Pool D</p>
+            <span id="lock-badge-d" class="mt-2 inline-block text-[10px] font-bold bg-purple-800 text-purple-300 px-2 py-0.5 rounded">ALERTING...</span>
+          </div>
+
+          <div id="counselor-box-e" class="p-3 rounded-xl bg-purple-900/60 border border-purple-700 opacity-80">
+            <p class="font-bold text-white">Prof. Eknath Shinde</p>
+            <p class="text-[10px] text-purple-200">STME Pool E</p>
+            <span id="lock-badge-e" class="mt-2 inline-block text-[10px] font-bold bg-purple-800 text-purple-300 px-2 py-0.5 rounded">ALERTING...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7-Stage Architectural Visualizer -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <h3 class="font-bold text-slate-900 text-sm flex items-center justify-between">
+          <span>7-Stage Telephony Routing Status</span>
+          <span class="text-xs font-mono text-slate-400">Exotel AgentStream</span>
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs" id="stageCards">
+          <div id="step-1" class="p-3 rounded-xl border border-slate-200 bg-slate-50 transition">
+            <p class="text-[10px] font-bold text-slate-400 uppercase">Stage 1</p>
+            <p class="font-bold text-slate-800 mt-0.5">Exotel Inbound</p>
+            <span class="text-[10px] text-slate-500 step-status">Standby</span>
+          </div>
+
+          <div id="step-2" class="p-3 rounded-xl border border-slate-200 bg-slate-50 transition">
+            <p class="text-[10px] font-bold text-slate-400 uppercase">Stage 2</p>
+            <p class="font-bold text-slate-800 mt-0.5">Whisper STT</p>
+            <span class="text-[10px] text-slate-500 step-status">Standby</span>
+          </div>
+
+          <div id="step-3" class="p-3 rounded-xl border border-slate-200 bg-slate-50 transition">
+            <p class="text-[10px] font-bold text-slate-400 uppercase">Stage 3</p>
+            <p class="font-bold text-slate-800 mt-0.5">NLP & Entity</p>
+            <span class="text-[10px] text-slate-500 step-status">Standby</span>
+          </div>
+
+          <div id="step-4" class="p-3 rounded-xl border border-slate-200 bg-slate-50 transition">
+            <p class="text-[10px] font-bold text-slate-400 uppercase">Stage 4</p>
+            <p class="font-bold text-slate-800 mt-0.5">Knowledge RAG</p>
+            <span class="text-[10px] text-slate-500 step-status">Standby</span>
+          </div>
+
+          <div id="step-5" class="p-3 rounded-xl border border-slate-200 bg-slate-50 transition">
+            <p class="text-[10px] font-bold text-slate-400 uppercase">Stage 5</p>
+            <p class="font-bold text-slate-800 mt-0.5">Office Hours (IST)</p>
+            <span class="text-[10px] text-slate-500 step-status">Standby</span>
+          </div>
+
+          <div id="step-6" class="p-3 rounded-xl border border-slate-200 bg-slate-50 transition">
+            <p class="text-[10px] font-bold text-slate-400 uppercase">Stage 6</p>
+            <p class="font-bold text-slate-800 mt-0.5">20s Atomic Lock</p>
+            <span class="text-[10px] text-slate-500 step-status">Standby</span>
+          </div>
+
+          <div id="step-7" class="p-3 rounded-xl border border-slate-200 bg-slate-50 transition">
+            <p class="text-[10px] font-bold text-slate-400 uppercase">Stage 7</p>
+            <p class="font-bold text-slate-800 mt-0.5">Live SIP Bridge</p>
+            <span class="text-[10px] text-slate-500 step-status">Standby</span>
+          </div>
+
+          <div class="p-3 rounded-xl border border-emerald-200 bg-emerald-50/50 flex items-center justify-center text-center">
+            <span class="font-bold text-emerald-800 text-[11px]">Zero Collision Verified ✓</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- JAVASCRIPT: WEB AUDIO TELEPHONY SOUNDS & MULTILINGUAL SPEECH SYNTHESIS -->
+  <script>
+    lucide.createIcons();
+
+    // ----------------------------------------------------
+    // 1. MULTILINGUAL DIALOGUE SCRIPT (EN, HI, MR)
+    // ----------------------------------------------------
+    const DIALOGUES = {
+      en: {
+        code: 'en-IN',
+        fallback: 'en-US',
+        langName: 'English',
+        callerBadge: '🇬🇧 English Mode',
+        greeting: "Welcome to SVKM Global University, Dhule. I am your AI admission assistant. How can I help you today?",
+        queries: [
+          {
+            title: "STME B.Tech Fees & Hostel",
+            text: "What is the annual fee structure for B.Tech Computer Engineering at STME and what are the hostel facilities?",
+            aiReply: "The annual tuition fee for B.Tech Computer Engineering at STME Dhule is Rupees 1,75,000 per year. Fully furnished campus hostels are available at Rupees 85,000 per year including dining and Wi-Fi."
+          },
+          {
+            title: "Connect to Human Counselor",
+            text: "Can you please connect me directly to an STME admission counselor right now regarding seat reservation?",
+            aiReply: "Certainly! I am transferring you immediately to our STME admission counselor pool. Please hold the line while an available counselor accepts your call."
+          },
+          {
+            title: "Pharmacy (SPO) Eligibility",
+            text: "What is the admission criteria for Bachelor of Pharmacy at SVKM School of Pharmacy?",
+            aiReply: "For B.Pharm at School of Pharmacy Dhule, candidates must have passed 10+2 with Physics, Chemistry, and Mathematics or Biology with at least 45% marks and a valid MHT-CET score."
+          }
+        ],
+        counselorConnectMsg: "Hello! This is Professor Chetan Patil from STME Admissions. I see you are inquiring about B.Tech Computer Engineering seat availability. I would be very pleased to assist you with your admission process!"
+      },
+      hi: {
+        code: 'hi-IN',
+        fallback: 'hi',
+        langName: 'हिन्दी (Hindi)',
+        callerBadge: '🇮🇳 हिन्दी Mode',
+        greeting: "एसव्हीकेएम ग्लोबल यूनिवर्सिटी, धुले में आपका स्वागत है। मैं आपकी एआई प्रवेश सहायिका हूँ। आज मैं आपकी क्या सहायता कर सकती हूँ?",
+        queries: [
+          {
+            title: "एसटीएमई बीटेक फीस व हॉस्टल",
+            text: "एसटीएमई धुले में बीटेक कंप्यूटर इंजीनियरिंग की सालाना फीस कितनी है और क्या हॉस्टल की सुविधा उपलब्ध है?",
+            aiReply: "एसटीएमई में बीटेक कंप्यूटर इंजीनियरिंग की वार्षिक ट्यूशन फीस ₹1,75,000 है। परिसर में छात्र-छात्राओं के लिए सुसज्जित हॉस्टल उपलब्ध है, जिसका वार्षिक शुल्क ₹85,000 है।"
+          },
+          {
+            title: "काउंसलर से बात करें (Live Transfer)",
+            text: "क्या आप मेरी बात अभी एसटीएमई एडमिशन काउंसलर से करा सकती हैं? मुझे एडमिशन प्रक्रिया समझनी है।",
+            aiReply: "जी अवश्य! मैं आपकी कॉल तुरंत हमारे एसटीएमई एडमिशन काउंसलर से जोड़ रही हूँ। कृपया कुछ सेकंड लाइन पर बने रहें।"
+          },
+          {
+            title: "बीबीए (SOC) पात्रता व प्रवेश",
+            text: "एसव्हीकेएम स्कूल ऑफ कॉमर्स में बीबीए कोर्स के लिए क्या पात्रता है?",
+            aiReply: "एसव्हीकेएम स्कूल ऑफ कॉमर्स में बीबीए के लिए 12वीं कक्षा न्यूनतम 50% अंकों के साथ उत्तीर्ण होना आवश्यक है। मेरिट के आधार पर सीधे प्रवेश उपलब्ध है।"
+          }
+        ],
+        counselorConnectMsg: "नमस्ते! मैं एसटीएमई से प्रोफेसर चेतन पाटिल बोल रहा हूँ। मुझे खुशी है कि आप कंप्यूटर इंजीनियरिंग में प्रवेश लेना चाहते हैं। बताइए, मैं आपकी एडमिशन और काउंसलिंग में कैसे सहायता करूँ?"
+      },
+      mr: {
+        code: 'mr-IN',
+        fallback: 'hi-IN',
+        langName: 'मराठी (Marathi)',
+        callerBadge: '🚩 मराठी Mode',
+        greeting: "एसव्हीकेएम ग्लोबल युनिव्हर्सिटी, धुळे मध्ये आपले स्वागत आहे. मी आपली एआय प्रवेश सहाय्यक आहे. मी आज आपल्याला कशी मदत करू शकते?",
+        queries: [
+          {
+            title: "एसटीएमई कॉम्प्युटर इंजिनिअरिंग फी",
+            text: "एसटीएमई धुळे येथे बी.टेक कॉम्प्युटर इंजिनिअरिंगची वार्षिक फी किती आहे आणि वसतिगृहाची सोय उपलब्ध आहे का?",
+            aiReply: "एसटीएमई मध्ये बी.टेक कॉम्प्युटर इंजिनिअरिंगची वार्षिक फी ₹1,75,000 आहे. तसेच कॅम्पसमध्ये मुला-मुलींसाठी आधुनिक वसतिगृह उपलब्ध असून त्याचे वार्षिक शुल्क ₹85,000 आहे."
+          },
+          {
+            title: "समुपदेशकांशी बोला (Live Transfer)",
+            text: "कृपया माझी कॉल त्वरित एसटीएमई प्रवेश समुपदेशकांशी जोडावी. मला कॅप राउंड आणि प्रवेशाबद्दल थेट चर्चा करायची आहे.",
+            aiReply: "नक्कीच! मी आपला कॉल त्वरित आमच्या एसटीएमई प्रवेश समुपदेशकांकडे ट्रान्सफर करत आहे. कृपया काही सेकंद कॉलवर रहा."
+          },
+          {
+            title: "फार्मसी (SPO) प्रवेश निकष",
+            text: "एसव्हीकेएम फार्मसी कॉलेजमध्ये बी.फार्म प्रवेशासाठी एमएचटी-सीईटी अनिवार्य आहे का?",
+            aiReply: "होय, स्कूल ऑफ फार्मसी धुळे येथे बी.फार्म प्रवेशासाठी १२ वी विज्ञान शाखेतून उत्तीर्ण आणि एमएचटी-सीईटी परीक्षा देणे अनिवार्य आहे."
+          }
+        ],
+        counselorConnectMsg: "नमस्कार! मी एसटीएमई कडून प्राध्यापक चेतन पाटील बोलत आहे. आपण बी.टेक कॉम्प्युटर इंजिनिअरिंगच्या प्रवेशाबाबत चौकशी करत आहात. मी आपल्याला कॅप राउंड, प्रवेश प्रक्रिया आणि आवश्यक कागदपत्रांबद्दल संपूर्ण मार्गदर्शन करतो."
+      }
+    };
+
+    let activeLang = 'en';
+    let isAudioEnabled = true;
+    let callSessionInterval = null;
+    let callDurationSeconds = 0;
+    let activeSpeaker = 'ai';
+    let lastSpokenText = '';
+
+    // ----------------------------------------------------
+    // 2. SYNTHESIZED TELECOM AUDIO TONES (Web Audio API)
+    // ----------------------------------------------------
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Play Ringback Tone (Dual Tone: 400Hz + 450Hz modulated)
+    let ringbackOsc1 = null;
+    let ringbackOsc2 = null;
+    let ringbackGain = null;
+
+    function playRingtone() {
+      if (!isAudioEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        ringbackOsc1 = ctx.createOscillator();
+        ringbackOsc2 = ctx.createOscillator();
+        ringbackGain = ctx.createGain();
+
+        ringbackOsc1.frequency.value = 400; // 400 Hz
+        ringbackOsc2.frequency.value = 450; // 450 Hz
+
+        ringbackGain.gain.setValueAtTime(0.08, ctx.currentTime);
+
+        ringbackOsc1.connect(ringbackGain);
+        ringbackOsc2.connect(ringbackGain);
+        ringbackGain.connect(ctx.destination);
+
+        ringbackOsc1.start();
+        ringbackOsc2.start();
+      } catch (e) {
+        console.warn('Audio tone error', e);
+      }
+    }
+
+    function stopRingtone() {
+      try {
+        if (ringbackOsc1) { ringbackOsc1.stop(); ringbackOsc1.disconnect(); ringbackOsc1 = null; }
+        if (ringbackOsc2) { ringbackOsc2.stop(); ringbackOsc2.disconnect(); ringbackOsc2 = null; }
+      } catch (e) {}
+    }
+
+    // Play Connected Beep Tone
+    function playConnectBeep() {
+      if (!isAudioEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.35);
+      } catch (e) {}
+    }
+
+    // ----------------------------------------------------
+    // 3. WEB SPEECH API MULTILINGUAL VOICE SYNTHESIS
+    // ----------------------------------------------------
+    function speakText(text, langCode, onEndCallback) {
+      lastSpokenText = text;
+      if (!isAudioEnabled || !('speechSynthesis' in window)) {
+        if (onEndCallback) setTimeout(onEndCallback, 1500);
+        return;
+      }
+
+      window.speechSynthesis.cancel(); // Stop any pending speech
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = langCode || 'en-IN';
+      utterance.rate = 1.0;
+      utterance.pitch = (activeSpeaker === 'counselor') ? 0.95 : 1.05;
+
+      // Try selecting a matching voice for en-IN, hi-IN, or mr-IN
+      const voices = window.speechSynthesis.getVoices();
+      let matchedVoice = voices.find(v => v.lang === langCode || v.lang.startsWith(langCode.split('-')[0]));
+      if (matchedVoice) {
+        utterance.voice = matchedVoice;
+      }
+
+      utterance.onend = () => {
+        if (onEndCallback) onEndCallback();
+      };
+
+      utterance.onerror = () => {
+        if (onEndCallback) onEndCallback();
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function toggleAudio() {
+      isAudioEnabled = !isAudioEnabled;
+      const icon = document.getElementById('audioIcon');
+      const text = document.getElementById('audioText');
+      const btn = document.getElementById('audioToggleBtn');
+
+      if (isAudioEnabled) {
+        icon.setAttribute('data-lucide', 'volume-2');
+        text.innerText = 'Voice Audio: ON';
+        btn.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 text-xs font-bold transition shadow-sm';
+      } else {
+        window.speechSynthesis.cancel();
+        stopRingtone();
+        icon.setAttribute('data-lucide', 'volume-x');
+        text.innerText = 'Voice Audio: MUTED';
+        btn.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 text-xs font-bold transition';
+      }
+      lucide.createIcons();
+    }
+
+    function repeatSpeech() {
+      if (lastSpokenText) {
+        speakText(lastSpokenText, DIALOGUES[activeLang].code);
+      }
+    }
+
+    // ----------------------------------------------------
+    // 4. LANGUAGE SWITCHER
+    // ----------------------------------------------------
+    function setLanguage(lang) {
+      activeLang = lang;
+      
+      // Update buttons
+      ['en', 'hi', 'mr'].forEach(l => {
+        const btn = document.getElementById('lang-btn-' + l);
+        if (l === lang) {
+          btn.className = 'px-3.5 py-1.5 rounded-xl font-black transition flex items-center gap-1.5 bg-white text-blue-900 shadow';
+        } else {
+          btn.className = 'px-3.5 py-1.5 rounded-xl font-black transition flex items-center gap-1.5 bg-blue-800/80 text-blue-100 hover:bg-blue-800';
+        }
+      });
+
+      document.getElementById('callerLangBadge').innerText = DIALOGUES[lang].callerBadge;
+      renderQueryButtons();
+
+      // If call is already active with AI, speak greeting in new language
+      if (activeSpeaker === 'ai' && !document.getElementById('screen-connected').classList.contains('hidden')) {
+        const greeting = DIALOGUES[lang].greeting;
+        updateSubtitles('SVKM AI Agent (' + DIALOGUES[lang].langName + '):', greeting);
+        appendTranscript('AI Voice Agent', greeting, 'ai', DIALOGUES[lang].langName);
+        speakText(greeting, DIALOGUES[lang].code);
+      }
+    }
+
+    function renderQueryButtons() {
+      const container = document.getElementById('queryButtonsContainer');
+      const queries = DIALOGUES[activeLang].queries;
+      container.innerHTML = '';
+
+      queries.forEach((q, idx) => {
+        const btn = document.createElement('button');
+        btn.className = idx === 1 
+          ? 'w-full text-left p-3 rounded-xl border-2 border-purple-300 bg-purple-50/50 hover:bg-purple-100 transition text-xs space-y-1'
+          : 'w-full text-left p-3 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50/40 transition text-xs space-y-1';
+
+        btn.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="font-bold ${idx === 1 ? 'text-purple-900' : 'text-slate-900'}">${q.title}</span>
+            <span class="text-[10px] font-bold ${idx === 1 ? 'bg-purple-200 text-purple-900' : 'bg-slate-100 text-slate-700'} px-1.5 py-0.5 rounded">
+              ${idx === 1 ? 'Counselor Bridge' : 'Instant AI'}
+            </span>
+          </div>
+          <p class="text-slate-600 text-[11px] leading-tight">"${q.text}"</p>
+        `;
+        btn.onclick = () => handleCallerQuery(q);
+        container.appendChild(btn);
+      });
+    }
+
+    // ----------------------------------------------------
+    // 5. CALL LIFECYCLE & 7-STAGE EXECUTION
+    // ----------------------------------------------------
+    function startInboundCall() {
+      // 1. Show Ringing Screen
+      document.getElementById('screen-idle').classList.add('hidden');
+      document.getElementById('screen-ringing').classList.remove('hidden');
+      document.getElementById('screen-connected').classList.add('hidden');
+      document.getElementById('callStatusBadge').innerText = 'RINGING...';
+      document.getElementById('callStatusBadge').className = 'bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse';
+
+      setStagePill(1, 'active', 'RECEIVING CALL (+91 2562)');
+      playRingtone();
+
+      appendTranscript('System', 'Inbound telephone call received on Exotel ExoPhone +91 2562 281456 from Caller +91 94220 56789.', 'sys');
+
+      // After 2.5 seconds of ringing, AI Agent accepts call
+      setTimeout(() => {
+        stopRingtone();
+        playConnectBeep();
+        setStagePill(1, 'done', 'CONNECTED (42ms)');
+        setStagePill(2, 'active', 'WHISPER-V3 READY');
+
+        // Show connected screen
+        document.getElementById('screen-ringing').classList.add('hidden');
+        document.getElementById('screen-connected').classList.remove('hidden');
+        document.getElementById('callStatusBadge').innerText = 'CONNECTED';
+        document.getElementById('callStatusBadge').className = 'bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full';
+
+        // Start call duration timer
+        callDurationSeconds = 0;
+        clearInterval(callSessionInterval);
+        callSessionInterval = setInterval(() => {
+          callDurationSeconds++;
+          const mins = String(Math.floor(callDurationSeconds / 60)).padStart(2, '0');
+          const secs = String(callDurationSeconds % 60).padStart(2, '0');
+          document.getElementById('callSessionDuration').innerText = `${mins}:${secs}`;
+        }, 1000);
+
+        // AI Agent speaks greeting in selected language out loud!
+        activeSpeaker = 'ai';
+        document.getElementById('callPartnerAvatar').innerText = 'AI';
+        document.getElementById('callPartnerAvatar').className = 'w-7 h-7 rounded-lg bg-blue-600 text-white font-bold text-xs flex items-center justify-center';
+        document.getElementById('callPartnerName').innerText = 'SVKM AI Voice Agent';
+        document.getElementById('callPartnerSubtitle').innerText = 'Multilingual Assistant (' + DIALOGUES[activeLang].langName + ')';
+        document.getElementById('audioSpeakerLabel').innerText = 'AI Agent Speaking';
+
+        const greeting = DIALOGUES[activeLang].greeting;
+        updateSubtitles('AI Voice Greeting (' + DIALOGUES[activeLang].langName + '):', greeting);
+        appendTranscript('AI Voice Agent', greeting, 'ai', DIALOGUES[activeLang].langName);
+
+        speakText(greeting, DIALOGUES[activeLang].code, () => {
+          setStagePill(2, 'done', 'STREAMING PCM');
+        });
+
+      }, 2500);
+    }
+
+    function handleCallerQuery(q) {
+      if (document.getElementById('screen-connected').classList.contains('hidden')) {
+        alert('Please click "CALL ADMISSION HELPLINE" first to connect the phone call!');
+        return;
+      }
+
+      // Caller speaks
+      appendTranscript('Caller (+91 94220)', q.text, 'caller', DIALOGUES[activeLang].langName);
+      updateSubtitles('Caller Inquiry:', `"${q.text}"`);
+
+      setStagePill(2, 'active', 'TRANSCRIBING...');
+      setStagePill(3, 'active', 'EXTRACTING INTENT');
+
+      setTimeout(() => {
+        setStagePill(2, 'done', 'TRANSCRIBED (98.9%)');
+        setStagePill(3, 'done', 'INTENT_RESOLVED');
+        setStagePill(4, 'active', 'KNOWLEDGE RAG');
+
+        // Check if query is human counselor transfer
+        if (q.title.includes('Counselor') || q.title.includes('काउंसलर') || q.title.includes('समुपदेशकांशी')) {
+          setStagePill(4, 'done', 'ESCALATION_TRIGGERED');
+          executeCounselorHandoff(q.aiReply);
+        } else {
+          setStagePill(4, 'done', 'FACT VERIFIED');
+          // AI replies with factual info and speaks out loud!
+          setTimeout(() => {
+            updateSubtitles('AI Voice Response:', q.aiReply);
+            appendTranscript('AI Voice Agent', q.aiReply, 'ai', DIALOGUES[activeLang].langName);
+            speakText(q.aiReply, DIALOGUES[activeLang].code);
+          }, 400);
+        }
+      }, 700);
+    }
+
+    function sendCustomCallerSpeech() {
+      const input = document.getElementById('customSpeechInput');
+      const val = input.value.trim();
+      if (!val) return;
+
+      if (document.getElementById('screen-connected').classList.contains('hidden')) {
+        alert('Please click "CALL ADMISSION HELPLINE" first to connect the call!');
+        return;
+      }
+
+      const q = {
+        title: "Custom Question",
+        text: val,
+        aiReply: activeLang === 'mr'
+          ? "आपल्या चौकशीबद्दल धन्यवाद. मी माहिती पडताळत आहे."
+          : activeLang === 'hi'
+            ? "आपके प्रश्न के लिए धन्यवाद। मैं एसटीएमई डेटाबेस से पुष्टि कर रही हूँ।"
+            : "Thank you for your question. I am verifying the details from our SVKM Dhule knowledge base."
+      };
+      input.value = '';
+      handleCallerQuery(q);
+    }
+
+    function requestCounselorTransfer() {
+      const q = DIALOGUES[activeLang].queries[1];
+      handleCallerQuery(q);
+    }
+
+    // ----------------------------------------------------
+    // 6. STAGE 6: 20-SECOND ATOMIC LOCK & COUNSELOR BRIDGE
+    // ----------------------------------------------------
+    function executeCounselorHandoff(aiPreTransferMsg) {
+      updateSubtitles('AI Voice Agent:', aiPreTransferMsg);
+      appendTranscript('AI Voice Agent', aiPreTransferMsg, 'ai', DIALOGUES[activeLang].langName);
+
+      // AI speaks transfer message
+      speakText(aiPreTransferMsg, DIALOGUES[activeLang].code, () => {
+        // Now initiate 20s lock animation & counselor broadcast
+        setStagePill(5, 'done', 'OFFICE OPEN (IST)');
+        setStagePill(6, 'active', 'ALERTING POOL C, D, E');
+
+        const lockCard = document.getElementById('counselorLockCard');
+        lockCard.classList.remove('hidden');
+
+        let lockSeconds = 20;
+        const lockTimerSec = document.getElementById('lockTimerSeconds');
+        const lockBar = document.getElementById('lockProgressBar');
+        lockBar.style.width = '100%';
+
+        // Broadcast to Counselor C, D, E
+        document.getElementById('lock-badge-c').className = 'mt-2 inline-block text-[10px] font-black bg-amber-400 text-slate-950 px-2 py-0.5 rounded animate-pulse';
+        document.getElementById('lock-badge-c').innerText = 'RINGING (20s)';
+        document.getElementById('lock-badge-d').innerText = 'RINGING (20s)';
+        document.getElementById('lock-badge-e').innerText = 'RINGING (20s)';
+
+        // Prof. Chetan Patil accepts atomically in 1.4s!
+        setTimeout(() => {
+          // Lock acquired by Counselor C!
+          document.getElementById('lock-badge-c').className = 'mt-2 inline-block text-[10px] font-black bg-emerald-400 text-slate-950 px-2 py-0.5 rounded';
+          document.getElementById('lock-badge-c').innerText = 'ACCEPTED (LOCKED)';
+          document.getElementById('counselor-box-c').className = 'p-3 rounded-xl bg-emerald-900 border-2 border-emerald-400 shadow-lg';
+
+          // Counselor D & E are locked out (zero collision!)
+          document.getElementById('lock-badge-d').innerText = 'ALREADY_ACCEPTED';
+          document.getElementById('lock-badge-e').innerText = 'ALREADY_ACCEPTED';
+
+          setStagePill(6, 'done', 'LOCKED (Prof. Chetan)');
+          setStagePill(7, 'active', 'SIP BRIDGING...');
+
+          playConnectBeep();
+
+          setTimeout(() => {
+            lockCard.classList.add('hidden');
+            setStagePill(7, 'done', 'LIVE TELEPHONY BRIDGE');
+
+            // Switch handset to Counselor Mode!
+            activeSpeaker = 'counselor';
+            document.getElementById('callPartnerAvatar').innerText = 'CP';
+            document.getElementById('callPartnerAvatar').className = 'w-7 h-7 rounded-lg bg-emerald-600 text-white font-bold text-xs flex items-center justify-center';
+            document.getElementById('callPartnerName').innerText = 'Prof. Chetan Patil';
+            document.getElementById('callPartnerSubtitle').innerText = 'STME Admissions Counselor (Live Bridge)';
+            document.getElementById('audioSpeakerLabel').innerText = 'Counselor Speaking';
+
+            const counselorSpeech = DIALOGUES[activeLang].counselorConnectMsg;
+            updateSubtitles('Prof. Chetan Patil (STME Counselor):', counselorSpeech);
+            appendTranscript('Prof. Chetan Patil (Counselor)', counselorSpeech, 'counselor', DIALOGUES[activeLang].langName);
+
+            // Counselor speaks to the student in their chosen language!
+            speakText(counselorSpeech, DIALOGUES[activeLang].code);
+
+          }, 1200);
+
+        }, 1500);
+
+      });
+    }
+
+    function endCallSession() {
+      window.speechSynthesis.cancel();
+      stopRingtone();
+      clearInterval(callSessionInterval);
+
+      document.getElementById('screen-idle').classList.remove('hidden');
+      document.getElementById('screen-ringing').classList.add('hidden');
+      document.getElementById('screen-connected').classList.add('hidden');
+      document.getElementById('counselorLockCard').classList.add('hidden');
+
+      document.getElementById('callStatusBadge').innerText = 'IDLE';
+      document.getElementById('callStatusBadge').className = 'bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded-full';
+
+      appendTranscript('System', 'Call session terminated. Recording saved & logged to SVKM Audit trail.', 'sys');
+
+      // Reset stages
+      for (let i = 1; i <= 7; i++) {
+        setStagePill(i, 'standby', 'Standby');
+      }
+    }
+
+    // ----------------------------------------------------
+    // 7. UI HELPERS
+    // ----------------------------------------------------
+    function updateSubtitles(tag, text) {
+      document.getElementById('subtitlesSpeakerTag').innerText = tag;
+      document.getElementById('subtitlesText').innerText = text;
+    }
+
+    function appendTranscript(speaker, text, role, lang) {
+      const feed = document.getElementById('transcriptFeed');
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const bubble = document.createElement('div');
+
+      let bgClass = 'bg-slate-50 border-slate-200 text-slate-800';
+      let tagBg = 'bg-slate-200 text-slate-800';
+
+      if (role === 'ai') {
+        bgClass = 'bg-blue-50/80 border-blue-200 text-blue-950';
+        tagBg = 'bg-blue-200 text-blue-900';
+      } else if (role === 'caller') {
+        bgClass = 'bg-amber-50/80 border-amber-200 text-amber-950';
+        tagBg = 'bg-amber-200 text-amber-900';
+      } else if (role === 'counselor') {
+        bgClass = 'bg-emerald-50/90 border-emerald-300 text-emerald-950';
+        tagBg = 'bg-emerald-200 text-emerald-900';
+      } else if (role === 'sys') {
+        bgClass = 'bg-slate-100 border-slate-200 text-slate-600 italic';
+        tagBg = 'bg-slate-300 text-slate-800';
+      }
+
+      bubble.className = `p-3 rounded-2xl border ${bgClass} space-y-1 animate-fadeIn`;
+      bubble.innerHTML = `
+        <div class="flex items-center justify-between text-[11px]">
+          <span class="font-bold px-1.5 py-0.2 rounded text-[10px] ${tagBg}">${speaker}</span>
+          <span class="text-slate-400 text-[10px]">${time} ${lang ? '• ' + lang : ''}</span>
+        </div>
+        <p class="leading-relaxed">${text}</p>
+      `;
+      feed.appendChild(bubble);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    function clearTranscript() {
+      document.getElementById('transcriptFeed').innerHTML = `
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-center text-slate-400">
+          Transcript cleared. Click <strong>"CALL ADMISSION HELPLINE"</strong> to begin.
+        </div>
+      `;
+    }
+
+    function setStagePill(stepNum, status, text) {
+      const card = document.getElementById('step-' + stepNum);
+      if (!card) return;
+      const statusSpan = card.querySelector('.step-status');
+
+      if (status === 'active') {
+        card.className = 'p-3 rounded-xl border-2 border-blue-500 bg-blue-50/70 transition shadow-sm animate-pulse';
+        statusSpan.className = 'text-[10px] font-bold text-blue-600 step-status';
+        statusSpan.innerText = text || 'Processing...';
+      } else if (status === 'done') {
+        card.className = 'p-3 rounded-xl border border-emerald-300 bg-emerald-50/60 transition';
+        statusSpan.className = 'text-[10px] font-bold text-emerald-700 step-status';
+        statusSpan.innerText = text || 'Complete ✓';
+      } else {
+        card.className = 'p-3 rounded-xl border border-slate-200 bg-slate-50 transition';
+        statusSpan.className = 'text-[10px] text-slate-500 step-status';
+        statusSpan.innerText = text || 'Standby';
+      }
+    }
+
+    // Initialize clock
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('clockDisplay').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Render initial query buttons for English
+    renderQueryButtons();
+  </script>
+</body>
+</html>

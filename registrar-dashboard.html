@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar Academic Portal | SVKM NMIMS Global University (SNGU) Dhule</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-purple-600 selection:text-white">
+
+  <!-- Role-Isolated Registrar Header -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Left: Logo & University Title -->
+      <div class="flex items-center gap-3.5">
+        <a href="index.html" class="flex items-center gap-3 group">
+          <img
+            src="https://www.svkmnmimsgu.ac.in/images/sngu_logo_new.jpg"
+            alt="SNGU Dhule Logo"
+            class="h-10 w-auto object-contain rounded-lg border border-slate-100 shadow-sm bg-white p-0.5"
+            onerror="this.style.display='none'; document.getElementById('fallback-logo-reg').style.display='flex';"
+          />
+          <div id="fallback-logo-reg" style="display:none;" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-800 to-indigo-700 items-center justify-center text-white shadow-md">
+            <i data-lucide="graduation-cap" class="w-6 h-6 text-amber-300"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="font-extrabold text-slate-900 tracking-tight text-base sm:text-lg group-hover:text-purple-700 transition">
+                SVKM NMIMS GLOBAL UNIVERSITY
+              </h1>
+              <span class="bg-purple-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded tracking-wide uppercase">
+                Registrar Portal
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-medium hidden sm:block">
+              Office of the Registrar • Academic Admissions & Seat Allocation Governance
+            </p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Right: User Profile & Quick Actions -->
+      <div class="flex items-center gap-3">
+        <div class="hidden lg:flex items-center gap-2 bg-purple-50 px-3 py-1.5 rounded-full text-xs font-medium text-purple-900 border border-purple-200">
+          <span class="w-2 h-2 rounded-full bg-purple-600"></span>
+          <span>Academic Year: <strong class="text-purple-950">2026-27</strong></span>
+          <span class="text-purple-300">|</span>
+          <span>CAP Round: <strong class="text-purple-950">Round II Active</strong></span>
+        </div>
+
+        <a href="index.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-bold transition">
+          <i data-lucide="home" class="w-3.5 h-3.5"></i>
+          <span>Home Page</span>
+        </a>
+
+        <!-- Persona Badge -->
+        <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
+          <div class="w-8 h-8 rounded-lg bg-purple-700 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+            R
+          </div>
+          <div class="text-left hidden sm:block">
+            <p class="text-xs font-bold text-slate-900">Prof. R. V. Patil</p>
+            <p class="text-[10px] font-extrabold text-purple-600 uppercase">University Registrar</p>
+          </div>
+          <a href="login.html" class="text-slate-400 hover:text-red-600 text-xs ml-1 transition" title="Sign Out">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Body Layout: Sidebar + Dashboard Content -->
+  <div class="flex-1 flex overflow-hidden">
+    <!-- Left Navigation Sidebar -->
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0 overflow-y-auto">
+      <div class="p-4 space-y-6">
+        <div>
+          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Registrar Operations</p>
+          <nav class="space-y-1">
+            <button onclick="switchRegTab('overview')" id="tab-reg-overview" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold bg-purple-50 text-purple-700 border border-purple-200">
+              <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Admissions Overview
+            </button>
+            <button onclick="switchRegTab('intake')" id="tab-reg-intake" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="pie-chart" class="w-4 h-4"></i> Seat Matrix & Intake (940)
+            </button>
+            <button onclick="switchRegTab('applications')" id="tab-reg-applications" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="users" class="w-4 h-4"></i> Student Applications (1,248)
+            </button>
+            <button onclick="switchRegTab('documents')" id="tab-reg-documents" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="file-check" class="w-4 h-4"></i> Document Verification (<span id="docBadgeCount">43</span>)
+            </button>
+          </nav>
+        </div>
+
+        <div>
+          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Academic Governance</p>
+          <nav class="space-y-1">
+            <button onclick="switchRegTab('schools')" id="tab-reg-schools" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="building-2" class="w-4 h-4"></i> Schools (STME, SPTM, SOC)
+            </button>
+            <button onclick="switchRegTab('calendar')" id="tab-reg-calendar" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="calendar" class="w-4 h-4"></i> Academic Calendar & Hours
+            </button>
+            <button onclick="switchRegTab('circulars')" id="tab-reg-circulars" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              <i data-lucide="bell" class="w-4 h-4"></i> Circulars & Notifications
+            </button>
+          </nav>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Scrollable Dashboard Content -->
+    <main class="flex-1 overflow-y-auto p-6 space-y-6">
+      
+      <!-- Section 1: Top Overview Stats (4 Registrar KPI Cards) -->
+      <div id="section-reg-overview" class="space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-black text-slate-900 tracking-tight">Academic Admissions & Seat Allocation Command</h2>
+            <p class="text-xs text-slate-500">Official oversight across STME Engineering, SPTM Pharmacy, and SOC Commerce</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="alert('Exporting official SNGU 2026-27 Admission Merit List PDF...')" class="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+              <i data-lucide="download" class="w-4 h-4"></i> Export Merit Report
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Live KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold uppercase tracking-wider">Total Applications</span>
+              <i data-lucide="file-text" class="w-4 h-4 text-purple-600"></i>
+            </div>
+            <p class="text-2xl font-black text-slate-900">1,248</p>
+            <p class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+              <i data-lucide="trending-up" class="w-3 h-3"></i> +24% vs last year
+            </p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold uppercase tracking-wider">Confirmed Admissions</span>
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
+            </div>
+            <p class="text-2xl font-black text-emerald-600">682 / 940</p>
+            <p class="text-[10px] text-slate-500">72.5% Total Capacity Filled</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold uppercase tracking-wider">Doc Verification Queue</span>
+              <i data-lucide="clock" class="w-4 h-4 text-amber-500"></i>
+            </div>
+            <p class="text-2xl font-black text-amber-600" id="kpiDocCount">43 Pending</p>
+            <p class="text-[10px] text-slate-500">Average review time: 1.2 hrs</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold uppercase tracking-wider">CAP Round Status</span>
+              <i data-lucide="award" class="w-4 h-4 text-blue-600"></i>
+            </div>
+            <p class="text-2xl font-black text-slate-900">CAP Round II</p>
+            <p class="text-[10px] text-purple-600 font-semibold">Reporting Closes: 30 Sept</p>
+          </div>
+        </div>
+
+        <!-- School Seat Matrix Progress Table -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-6 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-base">SNGU Academic Program Seat Fill Progress</h3>
+              <p class="text-xs text-slate-500">Intake capacity, confirmed enrollments, and vacancies across schools</p>
+            </div>
+            <span class="text-xs font-bold bg-purple-100 text-purple-800 px-2.5 py-1 rounded-full">
+              Overall: 72.5% Filled
+            </span>
+          </div>
+
+          <div class="space-y-4 text-xs">
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between font-bold">
+                <span class="text-slate-900">STME • B.Tech Computer Engineering (120 Seats)</span>
+                <span class="text-blue-700">112 Confirmed (8 Vacant) - 93%</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2.5">
+                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 93.3%;"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between font-bold">
+                <span class="text-slate-900">STME • B.Tech CSE (AI & Machine Learning) (60 Seats)</span>
+                <span class="text-blue-700">58 Confirmed (2 Vacant) - 96%</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2.5">
+                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 96.6%;"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between font-bold">
+                <span class="text-slate-900">STME • B.Tech CSE (Data Science) (60 Seats)</span>
+                <span class="text-blue-700">54 Confirmed (6 Vacant) - 90%</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2.5">
+                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 90%;"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between font-bold">
+                <span class="text-slate-900">SPTM • Bachelor of Pharmacy (B.Pharm) (100 Seats)</span>
+                <span class="text-emerald-700">86 Confirmed (14 Vacant) - 86%</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2.5">
+                <div class="bg-emerald-600 h-2.5 rounded-full" style="width: 86%;"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between font-bold">
+                <span class="text-slate-900">SOC • Bachelor of Business Administration (BBA) (120 Seats)</span>
+                <span class="text-purple-700">98 Confirmed (22 Vacant) - 81%</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2.5">
+                <div class="bg-purple-600 h-2.5 rounded-full" style="width: 81.6%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Document Verification Queue -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-base">Student Document Verification Queue</h3>
+              <p class="text-xs text-slate-500">MHT-CET Scorecards, 12th Marksheets, Domicile & Caste Certificates</p>
+            </div>
+            <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200" id="queueLabel">
+              43 Pending Clearance
+            </span>
+          </div>
+
+          <div class="divide-y divide-slate-100 text-xs" id="docVerificationList">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Seat Matrix Full View -->
+      <div id="section-reg-intake" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <h3 class="font-black text-slate-900 text-lg">Total Sanctioned Intake (940 Seats) - School Allocation</h3>
+        <p class="text-xs text-slate-500">Approved intake quotas per Government of Maharashtra & UGC guidelines</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs pt-2">
+          <div class="p-4 rounded-xl border border-blue-200 bg-blue-50/50">
+            <h4 class="font-bold text-blue-900 text-sm">STME Engineering</h4>
+            <p class="text-slate-600 mt-1">Sanctioned: <strong>480 Seats</strong></p>
+            <p class="text-slate-600">Filled: <strong>386 Seats (80.4%)</strong></p>
+          </div>
+          <div class="p-4 rounded-xl border border-emerald-200 bg-emerald-50/50">
+            <h4 class="font-bold text-emerald-900 text-sm">SPTM Pharmacy</h4>
+            <p class="text-slate-600 mt-1">Sanctioned: <strong>220 Seats</strong></p>
+            <p class="text-slate-600">Filled: <strong>164 Seats (74.5%)</strong></p>
+          </div>
+          <div class="p-4 rounded-xl border border-purple-200 bg-purple-50/50">
+            <h4 class="font-bold text-purple-900 text-sm">SOC Commerce</h4>
+            <p class="text-slate-600 mt-1">Sanctioned: <strong>240 Seats</strong></p>
+            <p class="text-slate-600">Filled: <strong>132 Seats (55.0%)</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Student Applications List -->
+      <div id="section-reg-applications" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <h3 class="font-black text-slate-900 text-lg">Registered Student Applications (1,248 Candidates)</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-500 uppercase border-b">
+              <tr>
+                <th class="p-3">Application ID</th>
+                <th class="p-3">Student Name</th>
+                <th class="p-3">Applied Program</th>
+                <th class="p-3">Score / Percentile</th>
+                <th class="p-3">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y text-slate-700">
+              <tr>
+                <td class="p-3 font-mono font-bold">SNGU-2026-0842</td>
+                <td class="p-3 font-bold">Ketan Ramesh Patil</td>
+                <td class="p-3">B.Tech Computer Engineering</td>
+                <td class="p-3 font-mono">94.8 %ile</td>
+                <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">Allotted Round II</span></td>
+              </tr>
+              <tr>
+                <td class="p-3 font-mono font-bold">SNGU-2026-0915</td>
+                <td class="p-3 font-bold">Snehal Dilip Chaudhari</td>
+                <td class="p-3">B.Pharm (Doctor of Pharmacy)</td>
+                <td class="p-3 font-mono">91.2 %ile</td>
+                <td class="p-3"><span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold">Verified</span></td>
+              </tr>
+              <tr>
+                <td class="p-3 font-mono font-bold">SNGU-2026-1044</td>
+                <td class="p-3 font-bold">Rohan Sunil Mahajan</td>
+                <td class="p-3">BBA (Business Admin)</td>
+                <td class="p-3 font-mono">88.6 %</td>
+                <td class="p-3"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold">Under Review</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section 4: Document Verification Queue Tab -->
+      <div id="section-reg-documents" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <h3 class="font-black text-slate-900 text-lg">Document Clearance Center</h3>
+        <p class="text-xs text-slate-500">Review certificates and approve student admissions for CAP Round II</p>
+        <div id="fullDocList" class="space-y-3 text-xs">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Section 5: Schools -->
+      <div id="section-reg-schools" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <h3 class="font-black text-slate-900 text-lg">Registrar Constituent Schools</h3>
+        <p class="text-xs text-slate-500">STME, SPTM, SOC Academic Regulation</p>
+        <div class="grid grid-cols-3 gap-4 text-xs">
+          <div class="p-4 border rounded-xl bg-blue-50">STME (Technology) • 7 B.Tech Branches</div>
+          <div class="p-4 border rounded-xl bg-emerald-50">SPTM (Pharmacy) • B.Pharm & Pharm.D</div>
+          <div class="p-4 border rounded-xl bg-purple-50">SOC (Commerce) • BBA, BCA, B.Com</div>
+        </div>
+      </div>
+
+      <!-- Section 6: Academic Calendar -->
+      <div id="section-reg-calendar" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <h3 class="font-black text-slate-900 text-lg">Academic Calendar A.Y. 2026-27</h3>
+        <ul class="text-xs space-y-2 list-disc pl-4 text-slate-700">
+          <li><strong>30 Sept 2026:</strong> CAP Round II Document Verification Closes</li>
+          <li><strong>05 Oct 2026:</strong> Institutional Level Vacancy Round Announcement</li>
+          <li><strong>15 Oct 2026:</strong> First Year Engineering & Pharmacy Orientation Ceremony</li>
+        </ul>
+      </div>
+
+      <!-- Section 7: Circulars Publisher -->
+      <div id="section-reg-circulars" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <h3 class="font-black text-slate-900 text-lg">Official Circulars & Notice Board Publisher</h3>
+          <button onclick="publishNewCircular()" class="px-3.5 py-1.5 bg-purple-600 text-white rounded-xl text-xs font-bold shadow-sm">
+            + Publish New Notice
+          </button>
+        </div>
+
+        <div class="space-y-3 text-xs" id="circularsList">
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-purple-700 font-bold">CIRCULAR #SNGU-2026-088</span>
+            <p class="font-bold text-slate-900 mt-0.5">CAP Round II Mandatory In-Person Verification at Dhule Campus</p>
+            <p class="text-slate-500 text-[11px] mt-1">Issued by: Office of the Registrar • 26 Sept 2026</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    let docQueue = [
+      { id: 'SNGU-2026-0842', name: 'Ketan Ramesh Patil', school: 'STME', prog: 'B.Tech Computer Engg', score: 'CET: 94.8%', docs: 'MHT-CET Scorecard, 12th Marks, Domicile' },
+      { id: 'SNGU-2026-0915', name: 'Snehal Dilip Chaudhari', school: 'SPTM', prog: 'B.Pharm Pharmacy', score: 'CET: 91.2%', docs: 'GPAT/CET Card, HSC Science Marksheet' },
+      { id: 'SNGU-2026-1044', name: 'Rohan Sunil Mahajan', school: 'SOC', prog: 'BBA (Hons)', score: 'HSC: 88.6%', docs: '12th Commerce Marksheet, Leaving Certificate' }
+    ];
+
+    function renderDocQueue() {
+      const el = document.getElementById('docVerificationList');
+      el.innerHTML = '';
+
+      docQueue.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3';
+        div.innerHTML = `
+          <div>
+            <p class="font-bold text-slate-900">${item.name} <span class="font-mono text-slate-400 font-normal">(${item.id})</span></p>
+            <p class="text-slate-500 text-[11px]">Applied: ${item.school} • ${item.prog} • ${item.score}</p>
+            <p class="text-slate-400 text-[10px] mt-0.5">Documents: ${item.docs}</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="approveDoc(${idx})" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1 transition">
+              <i data-lucide="check" class="w-3.5 h-3.5"></i> Approve
+            </button>
+            <button onclick="rejectDoc(${idx})" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs transition">
+              Resubmit
+            </button>
+          </div>
+        `;
+        el.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    function approveDoc(idx) {
+      const student = docQueue[idx];
+      alert(`✅ Documents APPROVED for ${student.name} (${student.id}).\nAdmission allotment confirmation letter generated.`);
+      docQueue.splice(idx, 1);
+      renderDocQueue();
+      updateDocCount();
+    }
+
+    function rejectDoc(idx) {
+      const student = docQueue[idx];
+      alert(`⚠️ Request for document re-upload sent via SMS to ${student.name}.`);
+      docQueue.splice(idx, 1);
+      renderDocQueue();
+      updateDocCount();
+    }
+
+    function updateDocCount() {
+      const c = docQueue.length + 40; // demo count
+      document.getElementById('kpiDocCount').innerText = `${c} Pending`;
+      document.getElementById('docBadgeCount').innerText = c;
+      document.getElementById('queueLabel').innerText = `${c} Pending Clearance`;
+    }
+
+    function publishNewCircular() {
+      const title = prompt('Enter Circular Subject / Title:');
+      if (title) {
+        alert(`Notice "${title}" published live to University Notice Board & WhatsApp channel.`);
+      }
+    }
+
+    function switchRegTab(tab) {
+      const sections = ['overview', 'intake', 'applications', 'documents', 'schools', 'calendar', 'circulars'];
+      sections.forEach(s => {
+        const el = document.getElementById('section-reg-' + s);
+        if (el) el.classList.add('hidden');
+      });
+
+      document.querySelectorAll('aside nav button').forEach(b => {
+        b.className = 'w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition';
+      });
+      const activeBtn = document.getElementById('tab-reg-' + tab);
+      if (activeBtn) {
+        activeBtn.className = 'w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold bg-purple-50 text-purple-700 border border-purple-200';
+      }
+
+      const target = document.getElementById('section-reg-' + tab);
+      if (target) target.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    renderDocQueue();
+  </script>
+</body>
+</html>

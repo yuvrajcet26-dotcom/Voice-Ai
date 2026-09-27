@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVKM NMIMS Global University (SNGU) Dhule | Official Portal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    .animate-marquee {
+      display: inline-block;
+      white-space: nowrap;
+      animation: marquee 25s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+
+  <!-- Top Emergency / Announcement Bar with Live Ticker -->
+  <div class="bg-gradient-to-r from-blue-950 via-indigo-950 to-blue-900 text-white py-2 px-4 border-b border-blue-800 text-xs overflow-hidden flex items-center">
+    <div class="flex items-center gap-2 shrink-0 bg-amber-400 text-slate-950 font-black px-2.5 py-0.5 rounded text-[10px] uppercase tracking-wider mr-3 z-10 shadow-sm">
+      <span class="w-2 h-2 rounded-full bg-slate-950 animate-ping mr-1"></span> SNGU NOTICES
+    </div>
+    <div class="overflow-hidden flex-1 relative whitespace-nowrap">
+      <div class="animate-marquee font-medium text-slate-200 text-xs space-x-8">
+        <span>📢 <strong>CAP Round II:</strong> Reporting and Document Verification Open for B.Tech, B.Pharm & BBA until 30 Sept 2026.</span>
+        <span>🎓 <strong>STME Admissions:</strong> Direct Second Year (DSE) seats open for Computer, AI & ML, and Data Science branches.</span>
+        <span>💊 <strong>SPTM Pharmacy:</strong> GPAT & MHT-CET Merit Quota registration live.</span>
+        <span>📞 <strong>AI Telephony Helpline:</strong> Dial <strong>+91 2562 281456</strong> for instant multilingual voice admission counseling (EN / HI / MR).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Public Navigation Header -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Left: Official SNGU Logo & University Title -->
+      <a href="index.html" class="flex items-center gap-3.5 group">
+        <img
+          src="https://www.svkmnmimsgu.ac.in/images/sngu_logo_new.jpg"
+          alt="SVKM NMIMS Global University (SNGU) Logo"
+          class="h-12 sm:h-14 w-auto object-contain rounded-lg border border-slate-100 shadow-sm bg-white p-1"
+          onerror="this.style.display='none'; document.getElementById('fallback-logo').style.display='flex';"
+        />
+        <div id="fallback-logo" style="display:none;" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-900 to-indigo-700 items-center justify-center text-white shadow-md">
+          <i data-lucide="graduation-cap" class="w-7 h-7 text-amber-300"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-black text-slate-950 tracking-tight text-base sm:text-lg group-hover:text-blue-700 transition">
+              SVKM NMIMS GLOBAL UNIVERSITY
+            </span>
+            <span class="bg-blue-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">
+              SNGU Dhule
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-500 font-medium hidden sm:block">
+            Shri Vile Parle Kelavani Mandal • Approved by UGC & Govt. of Maharashtra
+          </p>
+        </div>
+      </a>
+
+      <!-- Center: Main Public Nav Links -->
+      <nav class="hidden md:flex items-center gap-6 text-xs font-bold text-slate-700">
+        <a href="#about" class="hover:text-blue-600 transition">About Us</a>
+        <a href="#schools" class="hover:text-blue-600 transition">Constituent Schools</a>
+        <a href="#notices" class="hover:text-blue-600 transition">Notice Board</a>
+        <a href="#facilities" class="hover:text-blue-600 transition">Campus Facilities</a>
+        <a href="#contact" class="hover:text-blue-600 transition">Contact Us</a>
+        <a href="simulator.html" class="text-blue-600 hover:text-blue-800 flex items-center gap-1 font-extrabold">
+          <i data-lucide="radio" class="w-3.5 h-3.5 text-blue-600 animate-pulse"></i>
+          Voice Helpline
+        </a>
+      </nav>
+
+      <!-- Right: Role Login / Registration CTAs -->
+      <div class="flex items-center gap-2.5">
+        <a
+          href="login.html"
+          class="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs shadow-sm transition active:scale-[0.98]"
+        >
+          <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-500"></i>
+          <span>Portal Sign In</span>
+        </a>
+
+        <a
+          href="login.html"
+          class="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-600/20 transition active:scale-[0.98]"
+        >
+          <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">Counselor</span> Sign Up
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-b from-white via-blue-50/30 to-slate-50 border-b border-slate-200 overflow-hidden py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Hero Left Column -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 bg-blue-100/80 border border-blue-200 text-blue-900 px-3.5 py-1.5 rounded-full text-xs font-bold">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-blue-600"></i>
+            <span>Admissions A.Y. 2026-27 Open across Engineering, Pharmacy & Commerce</span>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.1]">
+            Empowering Future Leaders at <span class="bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-900 bg-clip-text text-transparent">SNGU Dhule</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-600 font-normal leading-relaxed max-w-2xl">
+            A state-of-the-art 33-acre green campus located in Dhule, North Maharashtra, offering world-class technology, management, pharmaceutical, and commerce education with dedicated AI-powered voice admission routing and personal counseling.
+          </p>
+
+          <!-- 24/7 Telephone Helpline Banner -->
+          <div class="bg-white p-5 rounded-3xl border-2 border-blue-200 shadow-xl shadow-blue-900/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 max-w-xl">
+            <div class="flex items-center gap-3.5">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 animate-bounce">
+                <i data-lucide="phone-call" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <p class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Official Multilingual Helpline</p>
+                <p class="text-2xl font-black text-slate-900 font-mono tracking-tight">+91 2562 281456</p>
+                <p class="text-xs text-emerald-600 font-semibold flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                  AI STT & Live Counselor Transfer • Mon-Sat 09:00-18:00
+                </p>
+              </div>
+            </div>
+            <a href="simulator.html" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs text-center shadow-md transition">
+              Simulate Call →
+            </a>
+          </div>
+
+          <!-- Feature badges -->
+          <div class="pt-2 flex flex-wrap gap-4 text-xs font-semibold text-slate-600">
+            <span class="flex items-center gap-1.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i> AICTE & PCI Approved</span>
+            <span class="flex items-center gap-1.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i> 100% Placement Assistance</span>
+            <span class="flex items-center gap-1.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i> English, Hindi & Marathi Support</span>
+          </div>
+        </div>
+
+        <!-- Hero Right Column: SNGU Campus Visual Showcase -->
+        <div class="lg:col-span-5">
+          <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-slate-900 group">
+            <img
+              src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1000&q=80"
+              alt="SNGU Dhule Modern Campus Architecture"
+              class="w-full h-80 sm:h-96 object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent p-6 flex flex-col justify-end text-white">
+              <span class="bg-blue-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full w-max uppercase tracking-wider mb-2">
+                33-Acre Sprawling Campus
+              </span>
+              <h3 class="text-xl font-black tracking-tight">World-Class Academic Infrastructure</h3>
+              <p class="text-xs text-slate-300 mt-1">
+                Behind Gurudwara, Near Mumbai-Agra National Highway 3, Dhule, Maharashtra
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Notice Board Section -->
+  <section id="notices" class="py-12 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+          <span class="text-xs font-bold text-blue-600 uppercase tracking-widest">Official Circulars</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">University Notice Board</h2>
+        </div>
+        <span class="text-xs text-slate-500">Updated: A.Y. 2026-27 Academic Cycle</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Notice 1 -->
+        <div class="p-5 rounded-2xl border border-blue-200 bg-blue-50/40 hover:shadow-md transition space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-blue-800 bg-blue-100 px-2 py-0.5 rounded">STME Engineering</span>
+            <span class="text-slate-400">26 Sept 2026</span>
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">CAP Round II Seat Allotment Reporting</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            All candidates allotted seats in B.Tech Computer, AI/ML, and Data Science must report to the SNGU Dhule campus with original documents before 30 September 2026.
+          </p>
+          <a href="login.html" class="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1">View Allotment List →</a>
+        </div>
+
+        <!-- Notice 2 -->
+        <div class="p-5 rounded-2xl border border-emerald-200 bg-emerald-50/40 hover:shadow-md transition space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">SPTM Pharmacy</span>
+            <span class="text-slate-400">25 Sept 2026</span>
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">B.Pharm & Pharm.D Document Clearance</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Document verification for First Year B.Pharm and Doctor of Pharmacy (Pharm.D) candidates is underway at the Registrar Document Clearance Center.
+          </p>
+          <a href="login.html" class="text-xs font-bold text-emerald-600 hover:underline flex items-center gap-1">Check Verification Status →</a>
+        </div>
+
+        <!-- Notice 3 -->
+        <div class="p-5 rounded-2xl border border-purple-200 bg-purple-50/40 hover:shadow-md transition space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-purple-800 bg-purple-100 px-2 py-0.5 rounded">SOC Commerce</span>
+            <span class="text-slate-400">24 Sept 2026</span>
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">BBA & BCA Merit Round 2 Admissions</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Applications invited for vacant seats in BBA, BCA, and B.Com (Honours). Contact admission counselor pool or dial helpline +91 2562 281456.
+          </p>
+          <a href="simulator.html" class="text-xs font-bold text-purple-600 hover:underline flex items-center gap-1">Speak to Counselor →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About SNGU Dhule Section -->
+  <section id="about" class="py-16 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <div class="lg:col-span-6 space-y-5">
+          <span class="text-xs font-bold text-blue-600 uppercase tracking-widest">About SNGU Dhule</span>
+          <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+            A Legacy of Excellence Under Shri Vile Parle Kelavani Mandal (SVKM)
+          </h2>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            SVKM NMIMS Global University (SNGU) at Dhule represents a landmark in premier higher education across North Maharashtra. Built upon SVKM’s distinguished 90-year legacy of managing premier institutions across Mumbai, Shirpur, Hyderabad, and Bengaluru, SNGU Dhule brings global-standard academic pedagogy and research infrastructure to the region.
+          </p>
+          <div class="grid grid-cols-2 gap-4 pt-2 text-xs font-bold text-slate-800">
+            <div class="p-3 bg-white rounded-xl border border-slate-200"><strong class="text-blue-600 text-lg block">33 Acres</strong> Sprawling High-Tech Campus</div>
+            <div class="p-3 bg-white rounded-xl border border-slate-200"><strong class="text-blue-600 text-lg block">940 Seats</strong> Annual Intake Capacity</div>
+            <div class="p-3 bg-white rounded-xl border border-slate-200"><strong class="text-blue-600 text-lg block">15+ Programs</strong> Engineering, Pharma, Commerce</div>
+            <div class="p-3 bg-white rounded-xl border border-slate-200"><strong class="text-blue-600 text-lg block">3 Languages</strong> English, Hindi & Marathi Voice AI</div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6">
+          <div class="rounded-3xl overflow-hidden shadow-xl border-4 border-white">
+            <img
+              src="https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?auto=format&fit=crop&w=900&q=80"
+              alt="SNGU Dhule Central Library and Research Complex"
+              class="w-full h-80 object-cover"
+            />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Constituent Schools Section with Real Imagery & Full Branch Catalog -->
+  <section id="schools" class="py-16 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+        <span class="text-xs font-bold text-blue-600 uppercase tracking-widest">Academic Hierarchy</span>
+        <h2 class="text-3xl font-black text-slate-900 tracking-tight">Constituent Schools of SNGU Dhule</h2>
+        <p class="text-sm text-slate-600">Explore undergraduate, postgraduate, and integrated degree programs across our constituent schools.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- School 1: STME -->
+        <div class="rounded-3xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:shadow-xl transition-all overflow-hidden flex flex-col justify-between border-t-4 border-t-blue-600">
+          <div class="relative h-48 overflow-hidden bg-slate-900">
+            <img
+              src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=700&q=80"
+              alt="School of Technology Management & Engineering (STME)"
+              class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500"
+            />
+            <div class="absolute top-3 left-3 bg-blue-600 text-white font-black text-xs px-2.5 py-1 rounded-lg">
+              STME
+            </div>
+            <div class="absolute bottom-3 left-3 text-white">
+              <p class="font-extrabold text-sm">School of Technology (STME)</p>
+              <p class="text-[10px] text-blue-200">Dean: Dr. Manoj S. Sonawane</p>
+            </div>
+          </div>
+
+          <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Engineering hub offering AICTE approved B.Tech & M.Tech programs with specialized labs in AI, IoT, Robotics, and Cloud Computing.
+            </p>
+
+            <div class="space-y-1 pt-2 border-t border-slate-200 text-xs text-slate-700">
+              <p class="font-bold text-slate-900 mb-1">Engineering Branches (450 Seats):</p>
+              <p class="flex items-center justify-between"><span>• B.Tech Computer Engineering</span> <strong>120 Seats</strong></p>
+              <p class="flex items-center justify-between"><span>• B.Tech CSE (AI & Machine Learning)</span> <strong>60 Seats</strong></p>
+              <p class="flex items-center justify-between"><span>• B.Tech CSE (Data Science)</span> <strong>60 Seats</strong></p>
+              <p class="flex items-center justify-between"><span>• B.Tech Information Technology</span> <strong>60 Seats</strong></p>
+              <p class="flex items-center justify-between"><span>• B.Tech Electrical Engineering</span> <strong>30 Seats</strong></p>
+              <p class="flex items-center justify-between"><span>• B.Tech Mechanical Engineering</span> <strong>30 Seats</strong></p>
+              <p class="flex items-center justify-between"><span>• B.Tech Civil Engineering</span> <strong>30 Seats</strong></p>
+              <p class="flex items-center justify-between text-blue-700 font-semibold"><span>• Integrated B.Tech + MBA Tech</span> <strong>60 Seats</strong></p>
+            </div>
+
+            <div class="pt-3 flex items-center justify-between">
+              <span class="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">5 Assigned Counselors</span>
+              <a href="login.html" class="text-xs font-bold text-slate-900 hover:text-blue-600 flex items-center gap-1">Apply Now →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- School 2: SPTM -->
+        <div class="rounded-3xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:shadow-xl transition-all overflow-hidden flex flex-col justify-between border-t-4 border-t-emerald-600">
+          <div class="relative h-48 overflow-hidden bg-slate-900">
+            <img
+              src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=700&q=80"
+              alt="School of Pharmacy & Technology Management (SPTM)"
+              class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500"
+            />
+            <div class="absolute top-3 left-3 bg-emerald-600 text-white font-black text-xs px-2.5 py-1 rounded-lg">
+              SPTM
+            </div>
+            <div class="absolute bottom-3 left-3 text-white">
+              <p class="font-extrabold text-sm">School of Pharmacy (SPTM)</p>
+              <p class="text-[10px] text-emerald-200">Dean: Dr. Vandana B. Patravale</p>
+            </div>
+          </div>
+
+          <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+            <p class="text-xs text-slate-600 leading-relaxed">
+              PCI approved pharmaceutical center specializing in drug formulation, pharmaceutical chemistry, pharmacology, and clinical research.
+            </p>
+
+            <div class="space-y-1 pt-2 border-t border-slate-200 text-xs text-slate-700">
+              <p class="font-bold text-slate-900 mb-1">Pharmacy Programs (190 Seats):</p>
+              <p class="flex items-center justify-between"><span>• Bachelor of Pharmacy (B.Pharm)</span> <strong>100 Seats</strong></p>
+              <p class="flex items-center justify-between"><span>• M.Pharm (Pharmaceutics)</span> <strong>15 Seats</strong></p>
+              <p class="flex items-center justify-between"><span>• M.Pharm (Quality Assurance)</span> <strong>15 Seats</strong></p>
+              <p class="flex items-center justify-between"><span>• Doctor of Pharmacy (Pharm.D)</span> <strong>30 Seats</strong></p>
+              <p class="flex items-center justify-between text-emerald-700 font-semibold"><span>• Integrated B.Pharm + MBA</span> <strong>60 Seats</strong></p>
+            </div>
+
+            <div class="pt-3 flex items-center justify-between">
+              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">3 Assigned Counselors</span>
+              <a href="login.html" class="text-xs font-bold text-slate-900 hover:text-emerald-600 flex items-center gap-1">Apply Now →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- School 3: SOC -->
+        <div class="rounded-3xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:shadow-xl transition-all overflow-hidden flex flex-col justify-between border-t-4 border-t-purple-600">
+          <div class="relative h-48 overflow-hidden bg-slate-900">
+            <img
+              src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=700&q=80"
+              alt="School of Commerce & Management (SOC)"
+              class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500"
+            />
+            <div class="absolute top-3 left-3 bg-purple-600 text-white font-black text-xs px-2.5 py-1 rounded-lg">
+              SOC
+            </div>
+            <div class="absolute bottom-3 left-3 text-white">
+              <p class="font-extrabold text-sm">School of Commerce (SOC)</p>
+              <p class="text-[10px] text-purple-200">Dean: Dr. R. K. Agrawal</p>
+            </div>
+          </div>
+
+          <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Business, fintech, and computer application school with Bloomberg finance terminal labs, corporate internships, and business incubation.
+            </p>
+
+            <div class="space-y-1 pt-2 border-t border-slate-200 text-xs text-slate-700">
+              <p class="font-bold text-slate-900 mb-1">Commerce & Law Programs (300 Seats):</p>
+              <p class="flex items-center justify-between"><span>• Bachelor of Business Admin (BBA)</span> <strong>120 Seats</strong></p>
+              <p class="flex items-center justify-between"><span>• Bachelor in Computer Apps (BCA)</span> <strong>60 Seats</strong></p>
+              <p class="flex items-center justify-between"><span>• B.Com (Honours)</span> <strong>60 Seats</strong></p>
+              <p class="flex items-center justify-between text-purple-700 font-semibold"><span>• Integrated BBA.LL.B (Honours)</span> <strong>60 Seats</strong></p>
+            </div>
+
+            <div class="pt-3 flex items-center justify-between">
+              <span class="text-[10px] font-bold text-purple-700 bg-purple-100 px-2 py-0.5 rounded">3 Assigned Counselors</span>
+              <a href="login.html" class="text-xs font-bold text-slate-900 hover:text-purple-600 flex items-center gap-1">Apply Now →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Campus Facilities Gallery -->
+  <section id="facilities" class="py-16 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+        <span class="text-xs font-bold text-blue-600 uppercase tracking-widest">Campus Infrastructure</span>
+        <h2 class="text-3xl font-black text-slate-900 tracking-tight">World-Class Facilities at Dhule</h2>
+        <p class="text-sm text-slate-600">Built to global standards for research, learning, sports, and student living.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-2 text-xs">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+            <i data-lucide="cpu" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">AI & Robotics Lab</h3>
+          <p class="text-slate-500">Advanced GPU clusters and robotics workstations for research.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-2 text-xs">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+            <i data-lucide="flask-conical" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">Pharma Formulation Lab</h3>
+          <p class="text-slate-500">PCI & FDA standard pharmaceutical formulation and QA suites.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-2 text-xs">
+          <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
+            <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">Bloomberg Finance Lab</h3>
+          <p class="text-slate-500">Live global financial market simulation terminals for BBA & MBA students.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-2 text-xs">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+            <i data-lucide="home" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">AC Residential Hostels</h3>
+          <p class="text-slate-500">Separate modern hostels for boys and girls with 24/7 Wi-Fi & dining.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Us & Map Section -->
+  <section id="contact" class="py-16 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        
+        <div class="lg:col-span-6 space-y-6">
+          <span class="text-xs font-bold text-blue-600 uppercase tracking-widest">Connect with Us</span>
+          <h2 class="text-3xl font-black text-slate-900 tracking-tight">Visit or Inquire at SNGU Dhule</h2>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Our admissions counseling office is available in-person on campus, over telephone, and via our AI-powered voice assistant.
+          </p>
+
+          <div class="space-y-4 text-xs">
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+                <i data-lucide="map-pin" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <strong class="text-slate-900 block font-bold">Campus Address:</strong>
+                <p class="text-slate-600">Survey No. 499, Plot No. 1, Behind Gurudwara, Near Mumbai-Agra National Highway 3, Dhule, Maharashtra - 424001</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                <i data-lucide="phone" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <strong class="text-slate-900 block font-bold">Admissions Helpline (ExoPhone):</strong>
+                <p class="text-slate-600 font-mono font-bold">+91 2562 281456 (Mon - Sat 09:00 - 18:00 IST)</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <strong class="text-slate-900 block font-bold">Official Email:</strong>
+                <p class="text-slate-600">admissions.dhule@svkmnmimsgu.ac.in | registrar.dhule@svkm.ac.in</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Enquiry Form -->
+        <div class="lg:col-span-6 bg-slate-50 p-8 rounded-3xl border border-slate-200">
+          <h3 class="text-lg font-black text-slate-900 mb-1">Quick Admission Enquiry</h3>
+          <p class="text-xs text-slate-500 mb-4">Leave your details to receive an instant counseling callback & WhatsApp prospectus.</p>
+          
+          <form onsubmit="handleEnquirySubmit(event)" class="space-y-3 text-xs">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Student Full Name</label>
+              <input type="text" required placeholder="e.g. Rahul Patil" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Mobile Number</label>
+                <input type="tel" required placeholder="+91 98230 00000" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">School of Interest</label>
+                <select class="w-full p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                  <option>STME (Engineering B.Tech/M.Tech)</option>
+                  <option>SPTM (Pharmacy B.Pharm/Pharm.D)</option>
+                  <option>SOC (Commerce BBA/BCA/Law)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Your Question / Inquiry</label>
+              <textarea placeholder="Ask about eligibility, fees, or CAP rounds..." class="w-full h-20 p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none"></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition">
+              Submit Admission Inquiry
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-slate-950 text-slate-400 py-12 mt-auto border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="space-y-3">
+        <div class="flex items-center gap-2">
+          <img
+            src="https://www.svkmnmimsgu.ac.in/images/sngu_logo_new.jpg"
+            alt="SNGU Dhule Logo"
+            class="h-8 w-auto object-contain rounded bg-white p-0.5"
+          />
+          <span class="font-black text-white text-base">SNGU Dhule</span>
+        </div>
+        <p class="text-xs text-slate-400">
+          Survey No. 499, Plot No. 1, Behind Gurudwara, Near Mumbai-Agra National Highway 3, Dhule, Maharashtra 424001
+        </p>
+        <p class="text-xs text-slate-300 font-semibold">
+          Helpline: +91 2562 281456
+        </p>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white text-xs uppercase tracking-wider mb-3">Constituent Schools</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href="#schools" class="hover:text-white transition">School of Technology (STME)</a></li>
+          <li><a href="#schools" class="hover:text-white transition">School of Pharmacy (SPTM)</a></li>
+          <li><a href="#schools" class="hover:text-white transition">School of Commerce (SOC)</a></li>
+          <li><a href="#" class="hover:text-white transition">SVKM School (K-12 Campus)</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white text-xs uppercase tracking-wider mb-3">Portals & Login</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href="login.html" class="hover:text-white transition">Main Admin Sign In</a></li>
+          <li><a href="login.html" class="hover:text-white transition">Registrar Academic Portal</a></li>
+          <li><a href="login.html" class="hover:text-white transition">Counselor Workstation Login</a></li>
+          <li><a href="simulator.html" class="hover:text-white transition">Multilingual Voice Simulator</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white text-xs uppercase tracking-wider mb-3">Admissions Office Hours</h4>
+        <div class="text-xs space-y-1.5 text-slate-400">
+          <p class="flex items-center justify-between"><span>Mon - Fri:</span> <span class="text-white font-medium">09:00 - 18:00 IST</span></p>
+          <p class="flex items-center justify-between"><span>Saturday:</span> <span class="text-white font-medium">09:00 - 14:00 IST</span></p>
+          <p class="flex items-center justify-between"><span>Sunday:</span> <span class="text-amber-400 font-medium">AI Agent Only (Callback Mode)</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-6 border-t border-slate-900 text-center text-xs text-slate-500">
+      © 2026 SVKM NMIMS Global University (SNGU), Dhule. All rights reserved. UGC Approved State Private University.
+    </div>
+  </footer>
+
+  <!-- FLOATING MULTILINGUAL AI CHATBOT WIDGET -->
+  <div class="fixed bottom-6 right-6 z-50">
+    <!-- Chat Toggle Button -->
+    <button
+      id="chatToggleBtn"
+      onclick="toggleChatWidget()"
+      class="w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-2xl shadow-blue-600/50 hover:scale-105 transition-all"
+      title="Ask SNGU AI Admissions Assistant"
+    >
+      <i id="chatIconOpen" data-lucide="message-square" class="w-6 h-6"></i>
+      <i id="chatIconClose" data-lucide="x" class="w-6 h-6 hidden"></i>
+    </button>
+
+    <!-- Chat Modal Window -->
+    <div id="chatModalWindow" class="hidden absolute bottom-16 right-0 w-80 sm:w-96 bg-white rounded-3xl shadow-2xl border-2 border-blue-500 overflow-hidden flex flex-col font-sans mb-2">
+      <!-- Chat Header -->
+      <div class="bg-gradient-to-r from-blue-700 to-indigo-700 p-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-white text-blue-700 flex items-center justify-center font-bold text-xs">
+            AI
+          </div>
+          <div>
+            <h4 class="font-extrabold text-sm leading-tight">SNGU AI Assistant</h4>
+            <p class="text-[10px] text-blue-200">Multilingual: English, हिन्दी, मराठी</p>
+          </div>
+        </div>
+        <button onclick="toggleChatWidget()" class="text-white/80 hover:text-white">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Chat Message Feed -->
+      <div id="chatMessages" class="p-4 space-y-3 h-72 overflow-y-auto text-xs bg-slate-50">
+        <div class="p-3 rounded-2xl bg-white border border-slate-200 text-slate-800 space-y-1">
+          <p class="font-bold text-blue-700">SNGU Admission Bot:</p>
+          <p>Namaste & Welcome to SVKM NMIMS Global University (SNGU) Dhule! How can I assist you with STME Engineering, SPTM Pharmacy, or SOC Commerce admissions today?</p>
+        </div>
+      </div>
+
+      <!-- Chat Input Form -->
+      <form onsubmit="handleChatSubmit(event)" class="p-3 bg-white border-t border-slate-200 flex items-center gap-2">
+        <input
+          id="chatInput"
+          type="text"
+          placeholder="Ask in English, हिन्दी, or मराठी..."
+          class="flex-1 p-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        />
+        <button type="submit" class="p-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    function handleEnquirySubmit(e) {
+      e.preventDefault();
+      alert('Thank you! Your enquiry has been received. Our admission counselor will call you within 15 minutes.');
+    }
+
+    function toggleChatWidget() {
+      const modal = document.getElementById('chatModalWindow');
+      const iconOpen = document.getElementById('chatIconOpen');
+      const iconClose = document.getElementById('chatIconClose');
+
+      if (modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
+        iconOpen.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+      } else {
+        modal.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const feed = document.getElementById('chatMessages');
+
+      // User Bubble
+      const userBubble = document.createElement('div');
+      userBubble.className = 'p-3 rounded-2xl bg-blue-600 text-white text-right ml-6';
+      userBubble.innerHTML = `<p>${val}</p>`;
+      feed.appendChild(userBubble);
+      input.value = '';
+
+      // Simulated AI Bot Response
+      setTimeout(() => {
+        let botReply = "For STME B.Tech Computer Engineering, annual fees are ₹1,75,000/yr and admissions are through CAP rounds. You can call +91 2562 281456 for direct counselor assistance.";
+        if (val.toLowerCase().includes('fee') || val.toLowerCase().includes('फीस') || val.toLowerCase().includes('फी')) {
+          botReply = "SNGU Dhule Fee Structure: STME B.Tech Computer Engineering is ₹1,75,000/yr; SPTM B.Pharm is ₹1,40,000/yr; SOC BBA is ₹1,25,000/yr. Hostel fees are ₹85,000/yr.";
+        } else if (val.toLowerCase().includes('counselor') || val.toLowerCase().includes('काउंसलर') || val.toLowerCase().includes('समुपदेशक')) {
+          botReply = "I can transfer you to our STME admission counselors (Prof. Chetan Patil / Prof. Deepali Wagh). Please call our helpline +91 2562 281456 or try the Voice Simulator.";
+        }
+
+        const botBubble = document.createElement('div');
+        botBubble.className = 'p-3 rounded-2xl bg-white border border-slate-200 text-slate-800 mr-6 space-y-1';
+        botBubble.innerHTML = `<p class="font-bold text-blue-700">SNGU Admission Bot:</p><p>${botReply}</p>`;
+        feed.appendChild(botBubble);
+        feed.scrollTop = feed.scrollHeight;
+      }, 500);
+    }
+  </script>
+</body>
+</html>

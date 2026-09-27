@@ -1,0 +1,68 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).(jpg|jpeg|png|webp|svg|ico|css|js)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "src": "^/login/?$",
+      "dest": "/login.html"
+    },
+    {
+      "src": "^/admin-dashboard/?$",
+      "dest": "/admin-dashboard.html"
+    },
+    {
+      "src": "^/counselor-portal/?$",
+      "dest": "/counselor-portal.html"
+    },
+    {
+      "src": "^/registrar-dashboard/?$",
+      "dest": "/registrar-dashboard.html"
+    },
+    {
+      "src": "^/simulator/?$",
+      "dest": "/simulator.html"
+    },
+    {
+      "src": "^/app/?(.*)$",
+      "dest": "/frontend/dist/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}
